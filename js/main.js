@@ -2,17 +2,23 @@ if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
             var container, stats;
             var cross;
 
-var camera, controls, scene, renderer, btn, stars=[], rains=[], pivot, startPosition=[], object;
+var camera, controls, scene, renderer, btn, stars=[], rains=[], pivot, startPosition=[], object, flatTarget=[];
+var fov = 70, zoomFov = 200, currentFov, camTween;
 var geometry, material;
-
+var isDragged = 0;
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
+var hovering = 0;
+// mouse.x=0;
+// mouse.y=0;
 var objects = [];
 var circleClick = [];
 var clickTime = 1;
 var inside = 0;
 var page;
 var mouseDown = 0;
+var showDrag = 1;
+var movingMouse = 0;
 var mouseClickX = 0;
 var mouseClickY = 0;
 var particleMaterial = new THREE.SpriteMaterial();
@@ -34,7 +40,8 @@ var randGround2 = .4
 
 var firstTime = 1;
 var menu=0;
-
+var flag = 0;
+var sound = 0;
 
 
 var query = "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
@@ -42,8 +49,14 @@ var query = "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (
 if (matchMedia(query).matches) {
   // do high-dpi stuff
   var retinaCheck = 1;
-  var www = window.innerWidth/2;
-  var hhh = window.innerHeight/2;
+  if (/Mobi/.test(navigator.userAgent)) {
+    www = window.innerWidth/2;
+    hhh = screen.height/2;
+}else{
+www = window.innerWidth/2;
+hhh = window.innerHeight/2;
+}
+
 
 } else {
   // do non high-dpi stuff
@@ -64,83 +77,142 @@ if (matchMedia(query).matches) {
 
 
 $(document).ready(function(){
-
+$('#btnTop').fadeOut();
   $('#nav-icon').click(function(){
     $(this).toggleClass('open');
   });
 
 // window.addEventListener("touchmove", rayHover, false);
 
-window.addEventListener( "resize", onWindowResize, false );
+window.addEventListener( 'resize', onWindowResize, false );
+window.addEventListener( 'touchstart', onMouseDown, false);
+window.addEventListener( 'touchend', onMouseUp, false );
+window.addEventListener( 'mousedown', onMouseDown, false);
+window.addEventListener( 'mouseup', onMouseUp, false );
+window.addEventListener( 'mousemove', onMouseMove, false );
+// window.addEventListener( "wheel", zoom, false );
 
-window.addEventListener( "wheel", zoom, false );
 
-var flag = 0;
-window.addEventListener("mousedown", function( event ){
+function onMouseDown( event ){
+
+
     flag = 0;
     mouseDown = 1;
+    isDragged = 1;
+    clickTime = 1;
+    showDrag = 0;
+    var drag = document.getElementById('drag');
+    drag.style.visibility='hidden'; 
+    if (/Mobi/.test(navigator.userAgent)) {     
+      mouseClickX = ( event.touches[0].clientX / www ) * retinaCheck - 1;
+      mouseClickY =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
+      mouse.x = mouseClickX;
+      mouse.y = mouseClickY;
+      rayHover( event );
+      // console.log(event.touches[0].clientX, www, mouseClickX)
+    } else{
     mouseClickX = ( event.clientX / www ) * retinaCheck - 1;
     mouseClickY =  - ( event.clientY / hhh ) * retinaCheck + 1;
-    // console.log(mouse.x)
-    // var geometry = new THREE.SphereGeometry( 10, 111 );
-    // var material1 = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: .5 } );
-    // var circle1 = new THREE.Mesh( geometry, material );
-    // // circle1.position.copy( inte.point );
-    // circle1.lookAt(camera.position);
-    // circle1.name="clickSphere1";
-    // circle1.position.x = event.clientX-renderer.domElement.clientWidth/2;
-    // circle1.position.y = event.clientY;
-    // scene.add( circle1 );
-    // circleClick.push( circle1 );
-    // // var clickSph = setTimeout(function(){
-    // //   scene.remove(circle1);
-    // // },1500);
-}, false);
+    // console.log(event.touches[0].clientX)
+  }
+};
 
-window.addEventListener("mousemove", function( event ){
+function onMouseMove( event ){
+  // console.log("dragging?")
+  // clickTime=1;
+  if (clickTime == 0){
+    $("#drag").css({
+       left:  event.pageX,
+       top:   event.pageY-25
+    });
+    $('html,body').css('cursor', 'pointer');
+
+}
+  if (/Mobi/.test(navigator.userAgent)) {
+      // mouse.x = ( event.touches[0].clientX / www ) * retinaCheck - 1;
+      // mouse.y =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
+  }else{
   mouse.x = ( event.clientX / www ) * retinaCheck - 1;
   mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
-}, false);
+  // movingMouse=1;
+}
+};
 
-window.addEventListener("mouseup", function( event ){
-  // circle1 = this.circle1;
-  // scene.remove( circleClick.circle1 );
-  var xx = Math.abs(mouseClickX - mouse.x);
-  var yy = Math.abs(mouseClickY - mouse.y);
+function onMouseUp( event ){
+  isDragged = 0;
+  mouseDown=0;
+  if (/Mobi/.test(navigator.userAgent)) {
+    if (hovering==1){
+      
+    }else{
+      mouse.x = 11;
+      mouse.y = 11;
+    }
+      // mouse.x = ( event.touches[0].clientX / www ) * retinaCheck - 1;
+      // mouse.y =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
+  }
+// clickTime=0;
+    // if (/Mobi/.test(navigator.userAgent)) {  
+    // // console.log(event.touches[0].clientX, www, mouseClickX, mouse.x, mouse)   
+    //     mouse.x = mouseClickX;
+    //     mouse.y = mouseClickY;
+    //     console.log("release")
+    //   }else{
+
+    //   }
+    var xx = Math.abs(mouseClickX - mouse.x);
+    var yy = Math.abs(mouseClickY - mouse.y);
+    // console.log(xx, mouseClickX, mouse.x)
+ 
   // console.log(xx)
   if (xx > 0.02 || yy > 0.02){
     flag=1;
+    
   }else{
     flag=0;
+     if(inside==0){
+      clickTime=0;
+
+    }
   }
 
 
+
     if(flag == 0){
+
         // console.log("click");
         if(clickTime==1){
+          // clickTime=0;
         // new TWEEN.Tween( camera.position).to({ z: 1500 }, 2000 ).easing(TWEEN.Easing.Quartic.InOut).start()
         // clickTime = 0;
       }else{
+        clickTime=0;
         event.preventDefault();
-        mouse.x = ( event.clientX / www ) * retinaCheck - 1;
-        mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
+        
+        if (/Mobi/.test(navigator.userAgent)) {  
+        // console.log(event.touches[0].clientX, www, mouseClickX, mouse.x, mouse)   
+            // mouse.x = mouseClickX;
+            // mouse.y = mouseClickY;
+            // console.log("release")
+          } else{
+            mouse.x = ( event.clientX / www ) * retinaCheck - 1;
+            mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
+          // console.log(event.touches[0].clientX)
+        }
         raycaster.setFromCamera( mouse, camera );
         var intersects = raycaster.intersectObjects( objects, true );
+          // console.log(hit, flag, clickTime)
+          // if(hit!="no" && /Mobi/.test(navigator.userAgent)){
+          //   intersects = hit;
+          //   console.log(intersects)
+          // }
+          // console.log(mouse.x)
         if ( intersects.length > 0 ) {
-          // xx = intersects[ 0 ].point.x
-          // yy = intersects[ 0 ].point.y
-          // zz = intersects[ 0 ].point.z
+
           clickTime=1;
           inside=1;
-          // console.log(intersects[ 0 ].point.x)
-          // var particle = new THREE.Sprite( particleMaterial );
-          // particle.position.copy( intersects[ 0 ].point );
-          // particle.scale.x = particle.scale.y = 22;
-          // scene.add( particle );
           inte = intersects[ 0 ];
-
           addClickSphere( inte );
-          // var FKD = $("#FKD");
           var FKD = document.getElementById('FKD');
           FKD.classList.add('zoom');
           new TWEEN.Tween( cluster.rotation).to({ x: 0, y: 0, z: 0 }, 3000 ).easing(TWEEN.Easing.Quartic.InOut).start();
@@ -153,67 +225,89 @@ window.addEventListener("mouseup", function( event ){
               xx = 150;
               yy = -48;
               zz = 305;  
-              page = document.getElementById('finding');
+              
+              // page = document.getElementById('finding');
             } else if(hit=="T tri"){
               xx = -363;
               yy = 143;
-              zz = -48;
-              page = document.getElementById('delight');
+              zz = -46;
+              // page = document.getElementById('delight');
             } else if(hit=="C Tube"){
               xx = -217;
               yy = 107;
               zz = 185;
-              page = document.getElementById('knowing');
+              // page = document.getElementById('knowing');
             }
             $('html,body').css('cursor', 'default');
             controls.enabled = false;
+              // page = document.getElementById('finding');
               
+              // audioPlayer.style.opacity= "0";
               
-              
-              
-            new TWEEN.Tween( camera.position).to({ x: xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
-              FKD.style.color="black";
-              page.style.color="black";
-              page.style.opacity=1; 
+              camDolly(100);
               var logo = document.getElementById('logoSvg');
-              logo.style.fill="black";
+              logo.style.opacity=0;
+            new TWEEN.Tween( camera.position).to({ x: xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
+              var FKD = document.getElementById('FKD');
+              FKD.style.opacity=0; 
+              var back = document.getElementById('back');
+              back.style.visibility="visible";
+              if(/Mobi/.test(navigator.userAgent)) {
+                back.style.opacity=0;
+              }else{
+                back.style.opacity=1;
+              }
+              
+              
+              var backText = document.getElementById('backText');
+              backText.style.visibility="visible"; 
+              if(/Mobi/.test(navigator.userAgent)) {
+                backText.style.opacity=1;
+              }else{
+                backText.style.opacity=0;
+              }
+              
               var menuu = document.getElementsByTagName('span');
               menuu[0].classList.add('colorBlack');
               menuu[1].classList.add('colorBlack');
               menuu[2].classList.add('colorBlack');
-              // var 'menu' = document.getElementById('nav-icon');
-              // 'menu.background-color.fill'="black";
+
+              
+              
               var dollyN = 1;
+              camDolly(40)
+              
               var dolly = setInterval(function(){
                 dollyN += .00001;
                 controls.dollyIn(dollyN);
-                  if (dollyN >=1.0015){
+                  if (dollyN >=1.0013){
                 dollyN=1;
-                // var page1 = document.getElementById('knowing');
-                // page1.text.color="black";
-
-                $("#particle").css({
-                  'pointer-events': 'all',
-                  'z-index': '1'
-                });
-                var back = document.getElementById('back');
-                back.style.opacity=1; 
-                // $("#knowing").text("ready");
-                // $("container").css('-webkit-text-fill-color', 'black');
-                // console.log($("pageContainer"))
-                // console.log(camera.position.x,camera.position.y,camera.position.z);
+                      page = document.getElementById('finding');
+                      page.style.color="black";
+                      page.style.opacity=1; 
+                      
+              
+                      var audioPlayer = document.getElementById('audioPlayer');
+                      audioPlayer.style.visibility="visible"; 
+                      audioPlayer.style.opacity=1; 
                 clearInterval(dolly);
                   }
                 }, 8);
-              }).start()
+              }).start();
+              
+  
 
       }
       }
     }
     else if(flag == 1){
-        // console.log("drag");
+      if(inside==0){
+      clickTime=0;
     }
-}, false);
+        // console.log("drag");
+        // isDragged = 1;
+    }
+};
 
 
 
@@ -225,7 +319,7 @@ window.addEventListener("mouseup", function( event ){
 // }
 
 
-
+  
 
 
 var clock = new THREE.Clock();
@@ -235,7 +329,8 @@ var clock = new THREE.Clock();
 
 window.scene = scene;
 window.THREE = THREE;
-
+// TouchEmulator();
+Sound();
 init();
 addStars();
 animateStars();
@@ -245,122 +340,218 @@ animate();
 
 }); // end document.ready
 
-function about(){
-    if (menu==0){
-      $("#about").fadeIn(1000).css({
-       'pointer-events': 'all'
+function rayCastDrag( event ){
+        deltaX = -camera.position.x;
+        deltaY = -camera.position.y;
+        deltaZ = -camera.position.z;
+
+        distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+        // console.log(distance);
+// mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+// mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        // var camZ = camera.position.z/1000;
+        // console.log(camZ);
+        var raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera( mouse, camera );
+        // console.log(mouse.x, event.clientX, event.touches[0].clientX, mouseClickX)
+        var intersects = raycaster.intersectObjects( flatTarget );
+        // console.log(mouse.x)
+        if ( intersects.length > 0 ) {
+          // console.log(intersects[ 0 ])
+          var geometry = new THREE.SphereGeometry( .005*distance,19,16 );
+          var material1 = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: .1, wireframe:true} );
+          var circle1 = new THREE.Mesh( geometry, material1 );
+          // circle1.position.copy( inte.point );
+          circle1.lookAt(camera.position);
+          circle1.name="clickSphere1";
+          circle1.position.x = intersects[ 0 ].point.x;
+          circle1.position.y = intersects[ 0 ].point.y;
+          circle1.position.z = intersects[ 0 ].point.z;
+          // circle1.position.z = distance;
+          scene.add( circle1 );
+          var ssss = 1
+          var stuff = setInterval(function(){
+            ssss-=.005;
+            circle1.scale.set( ssss, ssss, ssss );
+            // circle1.position.y-=10;
+            if (ssss<=0){
+            scene.remove(circle1);
+            clearInterval(stuff);
+          }
+          },5)
+          }
+ }
+
+function cameraMove( XX,YY,ZZ ) {
+  // controls.target=(new THREE.Vector3(0,0,0));
+const camera = this.camera;
+const begin = camera.position.clone();
+// const beginT = controls.target.clone();
+var position = new THREE.Vector3(XX,YY,ZZ);
+
+new TWEEN.Tween(begin)
+  .to(position, 200)
+  .easing(TWEEN.Easing.Quartic.InOut)
+  .onUpdate(function() {
+    camera.position.set(this.x, this.y, this.z)//.normalize().negate();
+  })
+  .onComplete(function(){
+    firstTime-=1;
+    if (firstTime==0){
+      
+      clickTime=0;
+      cameraMove( 0, -50, 1200 )
+  }else{
+    if (menu==1){
+    clickTime = 1;
+  }else if (firstTime ==-1){
+    $("#drag").css({
+       visibility: "visible"
+       // left:  window.innerWidth/2-50,
+       // top:   window.innerHeight/2+35
     });
-      // $("#logo-0").fadeTo('slow', .5);
-      menu = 1;
-      clickTime = 1;
-      // if (inside==1){
-      var logo = document.getElementById('logoSvg');
-      logo.style.opacity=0;
-      // }  
-      var menuu = document.getElementsByTagName('span');
-              menuu[0].classList.remove('colorBlack');
-              menuu[1].classList.remove('colorBlack');
-              menuu[2].classList.remove('colorBlack');
-  }
-  else if (menu==1){
-    $("#about").fadeOut(1000).css({
-       'pointer-events': 'none'
-    });
-    // $("#logo-0").fadeTo('slow', 1);
-    menu = 0;
-    var logo = document.getElementById('logoSvg');
-    logo.style.opacity=1;
-    if (inside==0){
-    clickTime = 0;
-    } else if (inside==1){
-    var menuu = document.getElementsByTagName('span');
-              menuu[0].classList.add('colorBlack');
-              menuu[1].classList.add('colorBlack');
-              menuu[2].classList.add('colorBlack');
-    }
-}
+  }}
+  })
+  .start();
 }
 
 function camBack(page){
-  inside=0;
-  $("#particle").css({
-                  'pointer-events': 'none',
-                  'z-index': '-11'
-                });
+  
+  if (/Mobi/.test(navigator.userAgent)) {  
+        // console.log(event.touches[0].clientX, www, mouseClickX, mouse.x, mouse)   
+            mouse.x = 1000;
+            mouse.y = 1000;          
+  }
+  
+  // $("#particle").css({
+  //                 'pointer-events': 'none',
+  //                 'z-index': '-11'
+  //               });
   var FKD = document.getElementById('FKD');
+  FKD.style.opacity=.2;
   FKD.classList.remove('zoom');
   var back = document.getElementById('back');
-  back.style.opacity=0; 
+  back.style.visibility="hidden"; 
+  var backText = document.getElementById('backText');
+  backText.style.visibility="hidden"; 
   var menuu = document.getElementsByTagName('span');
               menuu[0].classList.remove('colorBlack');
               menuu[1].classList.remove('colorBlack');
               menuu[2].classList.remove('colorBlack');
   // var page = document.getElementById('knowing')
-  var pageTitle = document.getElementById('FKD')
-  var logo = document.getElementById('logoSvg');
+  // var FKD = document.getElementById('FKD')
+  // FKD.style.color="white";
+  
   page.style.opacity=0; 
-  pageTitle.style.color="white";
-  logo.style.fill="white";
+  
+  var audioPlayer = document.getElementById('audioPlayer');
+      audioPlayer.style.visibility="hidden"; 
   var dollyN = 1;
+  setTimeout(function(){
   var dolly = setInterval(function(){
     dollyN -= .001;
     controls.dollyIn(dollyN);
     if (dollyN <=0.95){
       dollyN=1;
-      xx = camera.position.x - 150;
-      yy = camera.position.y - 200;
-      zz = camera.position.z - 400;
-
+      xx = 0 //camera.position.x - 100;
+      yy = -50 //camera.position.y - 100;
+      zz = 2500 //camera.position.z - 200;
       // $("#knowing").fadeIn();
-      clickTime = 0;
+      
       controls.enabled = true;
-      new TWEEN.Tween( camera.position).to({ x:  xx, y: yy, z: zz }, 1000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
-                
+      var logo = document.getElementById('logoSvg');
+                    logo.style.opacity=1;
+      new TWEEN.Tween( camera.position).to({ x:  xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
+                // camDolly(70)
+                clickTime = 0;
+                inside=0;
               }).start()
       clearInterval(dolly);
     }
   }, 20);
+  },1000);
 }
 
-function addClickSphere( inte ){
-          var size = 10;
-          var geometry = new THREE.SphereGeometry( size, 333 );
-          var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-          var circle = new THREE.Mesh( geometry, material );
-          circle.position.copy( inte.point );
-          circle.lookAt(camera.position)
-          circle.name="clickSphere"
-          scene.add( circle );
-
-          var clickSph = setTimeout(function(){
-            scene.remove(circle);
-          },500);
-
-        //   var clickSph = setInterval(function(){
-        //     size-=1;
-        //     $("clickSphere").scale(.2);
-        //   circle.scale(size)
-        //   if (size==0){
-        //     dollyN=1;
-        //     xx = camera.position.x - 700;
-        //     // yy = camera.position.y - 1500;
-        //     zz = camera.position.z - 400;
-        //     // $("#knowing").fadeIn();
-        //     clickTime = 0;
-        //     controls.enabled = true;
-        //     new TWEEN.Tween( camera.position).to({ x:  xx, y: yy, z: zz }, 2000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
-                      
-        //             }).start()
-        //     clearInterval(clickSph);
-        //   }
-        // }, 30);
-
+function camDolly(value){
+//   camera.fov = 20;
+// camera.updateProjectionMatrix();
+    var update = function(){
+      camera.fov = currentFov.fov;
+      camera.updateProjectionMatrix();
+        // camera.projectionMatrix.makePerspective( currentFov.fov, www / hhh, 1, 10000 );
+        render();
+    }
+    // con
+    // currentFov = { fov: 70};
+    currentFov = { fov: camera.fov};
+    // var newFov = 120;
+    // TWEEN.removeAll();
+    camTween = new TWEEN.Tween( currentFov ).to( {fov: value},3000 ).easing( TWEEN.Easing.Quartic.InOut ).onUpdate(update);
+    camTween.start();
 }
+
+
+
 
 function zoom(){
-  console.log("zoooom")
+  // console.log("zoooom")
 }
 
+function Sound() {
+    // this.name = name;
+    // audio = scene.getObjectById( 'audio');
+    audio = document.createElement('audio');
+    audioSfx1 = document.createElement('audio');
+    audioSfx2 = document.createElement('audio');
+    audioSfx3 = document.createElement('audio');
+    var rand = Math.floor(Math.random() * 2)+1;
+    audio.src = 'audio/1_Finding.mp3';
+    audio.volume=.8;
+    audio.loop=false;
+    audio.onended = function() {
+    // rand+=1;
+    // if (rand == 3) rand=1;
+    // audio.src = 'audio_1/Cassini_'+rand+'.mp3';
+    audio.play();
+    };
+    container = document.querySelector('#cont');
+    // stats = new Stats();
+    // container.appendChild( stats.dom );
+    // $("#statsDiv").hide();
+
+
+    // audioSfx = document.createElement('audio');
+    // audioSfxArray = new Array;
+    // for ( var i = 1; i < 8; i ++ ) {
+    // audioSfxArray.push('audio_1/SFX/sfx-'+i+'.mp3');
+    // }
+
+  }
+
+function playSound(sound){
+  // console.log(SC.pause());
+  //   SC.pause();
+    this.sound=sound;
+    // console.log(sound)
+    if (sound==1){
+        this.audio.pause();
+        this.sound=0;
+        $('.s0').fadeIn();
+        $('.s1').fadeOut();
+        // $('.soundIco').attr('xlink:href', 'img/sound_no.svg');
+        $('.soundIco').removeAttr('id', 'focusP');
+        // $('.s1').removeAttr('id', 'focusP');
+    }else if (sound==0){
+        this.audio.play();  
+        this.sound=1;
+        $('.s0').fadeOut();
+        $('.s1').fadeIn();
+        $('.soundIco').attr('id', 'focusP');
+    }
+} 
+
+// function soundPlause
 
 
 function init() {
@@ -378,7 +569,7 @@ renderer.setPixelRatio( window.devicePixelRatio * 1 );
 renderer.setSize( www, hhh );
 var container = document.getElementById( 'container' );
 container.appendChild( renderer.domElement );
-camera = new THREE.PerspectiveCamera(70, www / hhh, 1, 100000 );
+camera = new THREE.PerspectiveCamera(70, www / hhh, 1, 10000 );
 camera.position.z = 500;
 camera.position.y = 12000;
 controls = new THREE.OrbitControls( camera, container );
@@ -389,7 +580,7 @@ controls.maxPolarAngle = 2.5;
 controls.dampingFactor = 0.06;
 controls.rotateSpeed = 0.05;
 controls.enableZoom = true;
-controls.zoomSpeed = .1; // 1.0 is default
+controls.zoomSpeed = .2; // 1.0 is default
 controls.minDistance = 200;
 controls.maxDistance = 3000;
 
@@ -442,6 +633,18 @@ light2.position.set( -200, -250, 80 );
 
 
 function obj1(){
+
+  var geometry = new THREE.PlaneGeometry( 6000, 6000 );
+var material1 = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0.3, alphaTest: 0, visible: false } );
+flatT = new THREE.Mesh( geometry, material1 );
+// circle1.position.copy( inte.point );
+flatT.lookAt(camera.position);
+flatT.name="flatTarget";
+// flatT.opacity=0;
+// flatT.rotation.x=3.14/2;
+
+scene.add( flatT );
+flatTarget.push(flatT)
 
   cluster = new THREE.Object3D();
   cluster.name="cluster"
@@ -600,49 +803,68 @@ cameraMove( 0,-50,2000 );
 clearInterval(go);
 }
 }, 2000);
+}
 
+function about(){
+
+    if (menu==0){
+      // var embed = document.getElementById('embed');
+      // embed.style.visibility="hidden";
+      // embed.style.pointerEvents = "none"; 
+      $("#about").fadeIn(1000).css({
+       'pointer-events': 'all'
+    });
+      // $("#logo-0").fadeTo('slow', .5);
+      menu = 1;
+      clickTime = 1;
+      if (inside==0){
+      var logo = document.getElementById('logoSvg');
+      logo.style.opacity=0;
+      }  
+      var menuu = document.getElementsByTagName('span');
+              menuu[0].classList.remove('colorBlack');
+              menuu[1].classList.remove('colorBlack');
+              menuu[2].classList.remove('colorBlack');
+  }
+  else if (menu==1){
+
+    $("#about").fadeOut(1000).css({
+       'pointer-events': 'none'
+    });
+    // $("#logo-0").fadeTo('slow', 1);
+    menu = 0;
+    if (inside==0){
+    var logo = document.getElementById('logoSvg');
+    logo.style.opacity=1;
+    clickTime = 0;
+    } else if (inside==1){
+    var menuu = document.getElementsByTagName('span');
+              menuu[0].classList.add('colorBlack');
+              menuu[1].classList.add('colorBlack');
+              menuu[2].classList.add('colorBlack');
+    }
+}
 }
 
 
 
-function cameraMove( XX,YY,ZZ ) {
-  // controls.target=(new THREE.Vector3(0,0,0));
-const camera = this.camera;
-const begin = camera.position.clone();
-// const beginT = controls.target.clone();
-var position = new THREE.Vector3(XX,YY,ZZ);
+function addClickSphere( inte ){
+          var size = 10;
+          var geometry = new THREE.SphereGeometry( size, 333 );
+          var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+          var circle = new THREE.Mesh( geometry, material );
+          circle.position.copy( inte.point );
+          circle.lookAt(camera.position)
+          circle.name="clickSphere"
+          scene.add( circle );
 
-new TWEEN.Tween(begin)
-  .to(position, 2000)
-  .easing(TWEEN.Easing.Quartic.InOut)
-  .onUpdate(function() {
-    camera.position.set(this.x, this.y, this.z)//.normalize().negate();
-  })
-  .onComplete(function(){
-    firstTime-=1;
-    if (firstTime==0){
-      clickTime=0;
-      cameraMove( 0, -50, 800 )
-  }else{
-    if (menu==1){
-    clickTime = 1;
-  }}
-  })
-  .start();
- 
-//  const beginT = controls.target.clone();
-//  var positionT = new THREE.Vector3(0,0,0);
-// new TWEEN.Tween(beginT)
-//   .to(positionT, 2000)
-//   .easing(TWEEN.Easing.Quartic.InOut)
-//   .onUpdate(function() {
-//     controls.target.set(this.x, this.y, this.z);//.normalize().negate();
-//       // camera.controls.target.set( 0, 0, 0 )
-//   })
-
-//   .start();
+          var clickSph = setTimeout(function(){
+            scene.remove(circle);
+          },500);
 
 }
+
+
 
 
 function floorMove() {
@@ -654,28 +876,18 @@ function floorMove() {
   .start();
 }
 
-function onMouseMove( event ) {
+// function onMouseMove( event ) {
 
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
+//   // calculate mouse position in normalized device coordinates
+//   // (-1 to +1) for both components
 
-mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-  
-  // console.log(Math.floor(camera.position.x),Math.floor(camera.position.y),Math.floor(camera.position.z) )
+// mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+// mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-      //     // console.log(annot, annot.style.opacity)
-      // if (annot.style.opacity >=0){
-      //   console.log(annot.style.opacity)
-      //         var fadeAnnot = setInterval(function(){
-      //           annot.style.opacity -= .05;
-      //           if (annot.style.opacity <=0){
-      //             annot.style.opacity=0;
-      //             clearInterval(fadeAnnot);
-      //           }
-      //         }, 100);
-      // }
-}
+// }
+
+
+
 
 // function takeScreenshot() {
 //     // open in new window like this
@@ -698,13 +910,16 @@ mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 // }
 
 function rayHover( event ){
-  // event.preventDefault();
+      // event.preventDefault();
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera( mouse, camera );
-        // console.log(mouse.x, camera.x)
+        // console.log(mouse, camera);
         var intersects = raycaster.intersectObjects( objects, true );
         // console.log(mouse);
         if ( intersects.length > 0 ) {
+          var drag = document.getElementById('drag');
+          drag.style.visibility='hidden'; 
+          hovering=1;
           $('html,body').css('cursor', 'pointer');
             hit = intersects[ 0 ].object.name;
             // console.log(hit)
@@ -756,6 +971,14 @@ function rayHover( event ){
             var FKD = document.getElementById('FKD');
             FKD.style.opacity = 1;
         }else{
+          if (showDrag == 1){
+            var drag = document.getElementById('drag');
+                drag.style.visibility='visible'; 
+
+          }
+          hovering=0;
+          // clickTime=0;
+          // console.log(hit)
           $('html,body').css('cursor', 'default');
           ground = scene.getObjectByName('Ground');
           ground.material.opacity = 1;
@@ -788,7 +1011,6 @@ function rayHover( event ){
 }
 
 
-
 function onWindowResize() {
 
 camera.aspect = window.innerWidth / window.innerHeight;
@@ -797,8 +1019,13 @@ www = window.innerWidth;
 hhh = window.innerHeight;
 // renderer.setSize( window.innerWidth, window.innerHeight );
 } else {
+  if (/Mobi/.test(navigator.userAgent)) {
+    www = window.innerWidth/2;
+    hhh = screen.height/2;
+}else{
 www = window.innerWidth/2;
 hhh = window.innerHeight/2;
+}
 // renderer.setSize( www, hhh );
 }
 renderer.setSize( www, hhh );
@@ -809,11 +1036,20 @@ camera.updateProjectionMatrix();
 
 
 
-function animate() {
+function animate( event ) {
+          // if (firstTime<1){
+        
+flatT.lookAt(camera.position);
 
+
+        // console.log(firstTime);
   // setTimeout(function(){ 
   // cameraMove( 0,0,800 )
   // }, 1000);
+// movingMouse=0;
+if (isDragged == 1){
+    rayCastDrag( event );
+  }
 
   TWEEN.update();
   // var ground = document.getElementsByName("ground")
@@ -829,10 +1065,9 @@ controls.update(); // required if controls.enableDamping = true, or if controls.
 render();
 }
 function render( event ) {
-        // if (firstTime<1){
-        var time = Date.now() * 0.0001;
+var time = Date.now() * 0.0001;
         var delta = clock.getDelta();
-        // console.log(mouse.x)
+        // console.log(clickTime)
         // if( object ) object.rotation.y -= 110.5 * delta;
         light1.position.x = Math.sin( time * 10.7 ) * 70;
         light1.position.y = Math.cos( time * 10.5 ) * 70;
@@ -842,7 +1077,9 @@ function render( event ) {
           cluster.rotation.y = (Math.cos( time * 10.5 ) * .1)+.1; //+=.003;
         }  
         if(clickTime==0){
+          if (hovering==0){
         cluster.rotation.y = (Math.cos( time * 10.5 ) * .1)+.1; //+=.003;
+      }
         rayHover( event );
         }
 

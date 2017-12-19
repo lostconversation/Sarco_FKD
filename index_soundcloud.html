@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+  <!-- <meta name="viewport" content="initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, user-scalable=no"/> -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+  <meta name="description" content="Italy based musician, producer and sound designer. Check the new Album available now on your favourite digital platform. Enter and discover Sarc:o’s music.">
+  <title>Sarc:o</title>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:100,300,700" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+  <link href="style.css" rel="stylesheet">
+  <link href="style2.css" rel="stylesheet">
+  <meta name="google-site-verification" content="mmtspIPChyBQ6cCvuXCaYqOG7DUARFLweItsTpHFt4I" />
+
+</head>
+<body> 
+  
+<header>
+    <div>
+             <div id="nav-icon" class="float-right" onclick="about();">
+               <span id="span"></span>
+               <span id="span"></span>
+               <span id="span"></span>
+            </div>
+      <div>
+        <span id="logo-0">
+          <svg id="logoSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 25.35">
+            <path d="M0 17.27h3.19V19c0 2.43 1.3 3.6 5.48 3.6h10.41c4.87 0 6.3-1 6.3-4.59 0-3.12-1.23-3.91-5.41-3.91H13.6C3.36 14.12 0 13.5 0 6.92 0 1.27 3.36 0 10.28 0h7.23c8.33 0 10.42 2.12 10.42 6.54v.86h-3.16c-.07-3.94-.48-4.66-9.28-4.66h-3.57c-6.48 0-8.77.34-8.77 4.42 0 2.95.92 3.94 6.17 3.94h9.94c6.54 0 9.28 1.88 9.28 6.1v1.61c0 6.1-5 6.54-10 6.54H9.25c-4.9 0-9.25-.85-9.25-6.27zm168-7.98C168 3 170.16 0 176.87 0h14.29c6.72 0 8.84 3 8.84 9.29v6.78c0 6.27-2.12 9.29-8.84 9.29h-14.29c-6.72 0-8.84-3-8.84-9.29zM196.64 8c0-4.32-2.6-5.28-5.82-5.28h-13.6c-3.22 0-5.82 1-5.82 5.28v9.32c0 4.32 2.6 5.28 5.82 5.28h13.6c3.22 0 5.82-1 5.82-5.28zM57.06.27h-4.18L38.14 25.08h3.81l3.09-5.24 1.62-2.74 8.31-14.08 8.31 14.08 1.61 2.74 1.48 2.5H49.75l-1.62 2.74h23.66L57.06.27m101.27 6.55h2.95v2.95h-2.95zm0 8.46h2.95v2.95h-2.95zm-6.76-6.99V6.17c0-3.32-1.68-6.17-7.78-6.17H130.5c-6.72 0-8.84 3-8.84 9.29v6.78c0 6.27 2.12 9.29 8.84 9.29h13.29c6.1 0 7.78-2.84 7.78-6.17v-2.13h-2.95v1.13c0 4.21-2.6 4.42-5.69 4.42h-12.09c-3.22 0-5.82-1-5.82-5.28V8c0-4.32 2.6-5.28 5.82-5.28h12.09c3.08 0 5.69.21 5.69 4.42v1.15zM110 9.32v-2c0-4.66-1.13-7-8.29-7H81.84v24.76h3.36V3h15.28c4.93 0 6.13.89 6.13 3.67v2.27c0 2.6-1.58 3.6-5.31 3.6H90.68v2.74h10.9c3 0 4.93.48 4.93 4.35v5.45h3.15v-6.34c0-2.26-.82-4-4.25-4.66V14c2.59-.23 4.59-1.19 4.59-4.68z" class="3ae8e840-cec9-430d-96fe-c02b58021d65"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </header>
+  <!-- <button id="shot" onclick="takeScreenshot()">Screenshot</button> -->
+
+  <div id="container"></div>
+<!-- <div id="particle"></div> -->
+<div id="drag" class="blink_me" style="visibility: hidden;">drag around</div>
+  <div id="content">
+    <div id="FKD" class="unselectable" style="text-align:center; opacity:0"><p>LOADING</p></div> 
+      <div id="finding" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">"The true Delight<br>is in the Finding out<br>rather than the Knowing"<br><br><br>- Isaac Asimov -</p></div>
+      <!-- <div id="knowing" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">The true delight is in the finding out<br>rather than the<br><br><br><br><br>- Isaac Asimov -</p></div>
+      <div id="delight" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">The true<br><br><br>is in the finding out rather than the knowing<br><br><br>- Isaac Asimov -</p></div> -->
+      <div id="back" class="unselectable" onclick="camBack(page);">GO BACK</div>
+      <div id="embed" style="opacity:0.5">
+      <iframe id="player" width="100%" height="270px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/319675420&amp;color=%23ff5500&amp;buying=false&amp;sharing=false&amp;auto_play=false&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_playcount=false&amp;show_artwork=true&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false&amp;single_active=true"></iframe></div>
+  </div>
+
+
+
+<div id="about">
+  <button class="btn btnT" id="btnTop" title="Go to top">Top</button>
+    <!-- <div id="about-container"> -->
+      <div>
+        <p class="title">BIO</p>
+        <p>Italy based musician, producer and sound designer. <br>Co-founder of Yalla Records label, he’s been working as a producer on many records and composed soundtracks for videos and installations.</p><br>
+        <p>2012: his first USA tour<br><br>2013: Sarc:o has been awarded with the Golden A’Design Award for best music and sound design with the production of Chasing Space, soundtrack of the video by Marco Bagni, and contained in the album “Soundtracks Vol.1”.</p><br>
+        <p>2015: Sarc:o released the EP “Manifesto”, a break-through in Sarc:o’s music.</p><br>
+        <p>2017: a new EP “The Finding”, featuring the lead singer Nicola Pressi, supported by a live tour with a full band.</p><br><br><br>
+        <div class="hover-1" id="logo-email-bio"><a href="mailto:thesarco@gmail.com">
+          <img src="img/email.png"/></a>
+        </div>
+        <p>
+        
+        <p class="title">DISCOGRAPHY</p>  
+        <div class="album">
+          <img class="albumImg scaleImg4" src="img/Sarco___Finding_Knowing_Delight.jpg"/></img><br>
+            Finding Knowing Delight<br>
+            <button class="btn" onclick="window.open('https://open.spotify.com/album/4uSMW9yD4hshq2nqxJremp');" value="Finding Knowing Delight">
+          LISTEN / BUY</button>
+        </div>
+
+
+      <div class="albumsOut">
+          <div class="albums a1">
+          <img class="scaleImg1" src="img/1_The_Finding_0.jpg"/><br>The Finding<br>
+          <button class="btn" onclick="window.open('https://open.spotify.com/album/1iII4AQT0Uv9WA3JjHkfiQ?si=_b7LrdXnRIeao74535q18w');" value="The Finding">
+          LISTEN / BUY</button>
+        </div>
+        <div class="albums a2">
+          <img class="scaleImg1" src="img/2_The_Knowing_0.jpg"/>The Knowing<br>
+          <button class="btn" onclick="window.open('https://open.spotify.com/album/42sf4LN9SALmSPgTmLg0XV?si=kma11SbMQC2LgG2o1ZYBnA');" value="The Finding">
+          LISTEN / BUY</button>
+        </div>
+        <div class="albums a3">
+          <img class="scaleImg1" src="img/3_The_Delight_0.jpg"/>The Delight<br>
+          <button class="btn" onclick="window.open('https://open.spotify.com/album/3G9hV59Jh7eOthQtOk9tpz?si=9SwcfAwBRJWZLHAe2iFaKw');" value="The Finding">
+          LISTEN / BUY</button>
+        </div>
+      </div>
+        <br>
+        
+
+        
+          
+
+        <div  id="audio">
+          <div class="audio hover-1" id="logo-spotify"><a href="https://open.spotify.com/artist/464kT7csK2mNR1MNcKFTf5" target="_blank">
+          <img src="img/logo_spotify.png"/></a>
+        </div>
+        <div class="audio hover-1" id="logo-soundcloud"><a href="https://soundcloud.com/sarco-o" target="_blank">
+          <img src="img/logo_soundcloud.png"/></a>
+        </div>
+        
+        <div class="audio hover-1" id="logo-apple"><a href="https://itunes.apple.com/us/artist/sarc-o/1277969054" target="_blank">
+          <img src="img/logo_apple.png"/></a>
+        </div>
+        </div>
+
+        <p class="title">VIDEO</p>  
+        <div>
+        <div class="embed-container v1" style="text-align: center;"><iframe src="https://www.youtube.com/embed/gRPlJZS6HD8" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+        <div class="embed-container v2" style="text-align: center;"><iframe src="http://player.vimeo.com/video/139909203?loop=1" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+        <div class="embed-container v3" style="text-align: center;"><iframe src="http://player.vimeo.com/video/35565030?loop=1" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+      </div>
+
+
+        <!-- <p class="title">CONTACTS</p> -->
+
+        <div id="footer">
+        <!-- <p class="title">CONTACT</p>  -->
+        <div class="socials hover-1" id="logo-fb"><a href="https://www.facebook.com/thesarco/" target="_blank">
+          <img src="img/logo_fb.png"/></a>
+        </div>
+        <div class="socials hover-1" id="logo-insta"><a href="https://www.instagram.com/iamsarco" target="_blank">
+          <img src="img/logo_insta.png"/></a>
+        </div>
+        <div class="socials hover-1" id="logo-email"><a href="mailto:thesarco@gmail.com">
+          <img src="img/email.png"/></a>
+        </div>
+        <div class="lost hover-1"><a href="http://www.lostconversation.com" target="_blank">
+          <img src="img/logo_lost.png"/></a>
+        </div>
+        
+
+      
+      
+      <!-- <a class="hover-1"  id="logo-lost" title="Lostconversation" target="_blank" href="http://www.lostconversation.com">
+          <img alt="Marco Bagni" src="img/logo_lost.png" width="200px"/>
+        </a> -->
+      
+      </div>
+      </div>
+  <!-- </div> -->
+  </div>
+
+
+ 
+  <script src="http://threejs.org/build/three.min.js"></script>
+  <script src='https://threejs.org/examples/js/Detector.js'></script>
+  <script src="http://threejs.org/examples/js/ImprovedNoise.js"></script>
+  <script src="http://threejs.org/examples/js/libs/tween.min.js"></script>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+
+<!--   // <script src="js_over/particles.js"></script>
+  // <script src="js_over/finding.js"></script> -->
+
+  <!-- // <script src="js/Projector.js"></script> -->
+  <!-- // <script src="http://threejs.org/examples/js/libs/stats.min.js"></script> -->
+  <script src="js/OrbitControls_old.js"></script>
+  <!-- // <script src="js/soundcloud.js"></script> -->
+  <script src="js/stage.js"></script>
+  <script src="js/main.js"></script>
+
+
+<script>
+
+var iframe = document.querySelector('#player');
+var sc = SC.Widget(iframe);
+
+sc.bind(SC.Widget.Events.READY, function() {
+    // var d = document.createTextNode('Ready');
+    // document.querySelector('body').appendChild(d);
+});
+
+// document.querySelector('button').addEventListener('click', function() {
+//     sc.play();
+// });
+
+
+// back to top internal page
+$('#about').scroll(function(){
+  console.log($('#about').scrollTop())
+    if ($('#about').scrollTop() > 200) {
+      $('#btnTop').fadeIn();
+    } else {
+      $('#btnTop').fadeOut();
+    }
+  });
+  
+  //Click event to scroll to top
+  $('#btnTop').click(function(){
+    $('#about').animate({scrollTop : 0},800);
+    return false;
+  });
+
+</script>
+
+
+
+</body>
+</html>

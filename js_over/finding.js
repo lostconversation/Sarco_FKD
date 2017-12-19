@@ -105,13 +105,13 @@ particlesJS('particle',
       "bubble": {
         "distance": 400,
         "size": 4,
-        "duration": 0.3,
+        "duration": .5,
         "opacity": 1,
         "speed": 3
       },
       "repulse": {
-        "distance": 200,
-        "duration": 0.4
+        "distance": 300,
+        "duration": 1
       },
       "push": {
         "particles_nb": 4

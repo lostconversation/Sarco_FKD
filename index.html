@@ -2,12 +2,15 @@
 <html>
 <head>
    <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-  <meta name="description" content="Italy based musician, producer and sound designer. Check the new EP available now on your favourite digital platform. Enter and discover Sarc:o’s music.">
+  <!-- <meta name="viewport" content="initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, user-scalable=no"/> -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+  <meta name="description" content="Italy based musician, producer and sound designer. Check the new Album available now on your favourite digital platform. Enter and discover Sarc:o’s music.">
   <title>Sarc:o</title>
   <link href="https://fonts.googleapis.com/css?family=Oswald:100,300,700" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
   <link href="style.css" rel="stylesheet">
   <link href="style2.css" rel="stylesheet">
+  <meta name="google-site-verification" content="mmtspIPChyBQ6cCvuXCaYqOG7DUARFLweItsTpHFt4I" />
 
 </head>
 <body> 
@@ -18,6 +21,10 @@
                <span id="span"></span>
                <span id="span"></span>
                <span id="span"></span>
+            </div>
+            <div id="sound">
+                  <img class="soundIco s0" src="img/sound_no.svg" onerror="this.onerror=null;" onclick="playSound(sound)" style = "display:none"></img> 
+                  <img class="soundIco s1" src="img/sound.svg" onerror="this.onerror=null;" onclick="playSound(sound)" id="focusP" style = "display:none"></img> 
             </div>
       <div>
         <span id="logo-0">
@@ -31,34 +38,45 @@
   <!-- <button id="shot" onclick="takeScreenshot()">Screenshot</button> -->
 
   <div id="container"></div>
-<div id="particle"></div>
+<!-- <div id="particle"></div> -->
+<div id="drag" class="blink_me" style="visibility: hidden;">drag around</div>
   <div id="content">
     <div id="FKD" class="unselectable" style="text-align:center; opacity:0"><p>LOADING</p></div> 
-      <div id="finding" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">The true delight is in the<br><br><br>out rather than the knowing</p></div>
-      <div id="knowing" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">The true delight is in the finding out<br>rather than the</p></div>
-      <div id="delight" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">The true<br><br><br>is in the finding out rather than the knowing</p></div>
-      <div id="back" class="unselectable" onclick="camBack(page);">GO BACK</div>
+      <div id="finding" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">"The true Delight<br>is in the Finding out<br>rather than the Knowing"<br><br><br>- Isaac Asimov -</p>
+      <div id="audioPlayer" style="text-align:center; opacity:0">
+        <img class="playIco" onclick="playSound(sound)" src="img/play.png"/></img>
+          <img class="coverPlayer" src="img/1_The_Finding.jpg"/></img>
+          <!-- <button class="btn" onclick="window.open('https://open.spotify.com/album/1iII4AQT0Uv9WA3JjHkfiQ?si=_b7LrdXnRIeao74535q18w');" value="The Finding">LISTEN / BUY</button> -->
+        </div></div>
+         <img id="back" class="unselectable" onclick="camBack(page);" src="img/back.svg"/></img>
+         <div id="backText" class="unselectable" onclick="camBack(page);">BACK</div>
+      
+
+      <!-- <div id="embed" style="opacity:0.5">
+      <iframe id="player" width="100%" height="270px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/319675420&amp;color=%23ff5500&amp;buying=false&amp;sharing=false&amp;auto_play=false&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_playcount=false&amp;show_artwork=true&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false&amp;single_active=true"></iframe></div> -->
   </div>
 
 
 
 <div id="about">
-
-    <div id="about-container">
+  <button class="btn btnT" id="btnTop" title="Go to top">Top</button>
+    <!-- <div id="about-container"> -->
       <div>
         <p class="title">BIO</p>
         <p>Italy based musician, producer and sound designer. <br>Co-founder of Yalla Records label, he’s been working as a producer on many records and composed soundtracks for videos and installations.</p><br>
-        <p>2012: his first USA tour<br><br>2013: Sarc:o has been awarded with the Golden A’Design Award for best music and sound design with the production of Chasing Space, soundtrack of the video by Marco Bagni (Lostconversation), and contained in the album “Soundtracks Vol.1” released in 2013.</p><br>
+        <p>2012: his first USA tour<br><br>2013: Sarc:o has been awarded with the Golden A’Design Award for best music and sound design with the production of Chasing Space, soundtrack of the video by Marco Bagni, and contained in the album “Soundtracks Vol.1”.</p><br>
         <p>2015: Sarc:o released the EP “Manifesto”, a break-through in Sarc:o’s music.</p><br>
-        <p>2017: a new EP “The Finding”, featuring the lead singer Nicola Pressi, supported by a live tour with a full band.</p><br><br><br>
-        <!-- <a title="Contact Sarc:o" class="hover-0"   href="mailto:info@iamsarco.com">E-Mail</a> -->
+        <p>2017: a new album “Finding Knowing Delight”, featuring the lead singer Nicola Pressi, supported by a live tour with a full band.</p><br><br><br>
+        <div class="hover-1" id="logo-email-bio"><a href="mailto:thesarco@gmail.com">
+          <img src="img/email.png"/></a>
+        </div>
         <p>
         
         <p class="title">DISCOGRAPHY</p>  
         <div class="album">
           <img class="albumImg scaleImg4" src="img/Sarco___Finding_Knowing_Delight.jpg"/></img><br>
-            Knowing Finding Delight<br>
-            <button class="btn" onclick="window.open('#');" value="Finding Knowing Delight">
+            Finding Knowing Delight<br>
+            <button class="btn" onclick="window.open('https://open.spotify.com/album/4uSMW9yD4hshq2nqxJremp');" value="Finding Knowing Delight">
           LISTEN / BUY</button>
         </div>
 
@@ -82,6 +100,7 @@
       </div>
         <br>
         
+
         
           
 
@@ -97,15 +116,26 @@
           <img src="img/logo_apple.png"/></a>
         </div>
         </div>
+
+        <p class="title">VIDEO</p>  
+        <div>
+        <div class="embed-container v1" style="text-align: center;"><iframe src="https://www.youtube.com/embed/gRPlJZS6HD8" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+        <div class="embed-container v2" style="text-align: center;"><iframe src="http://player.vimeo.com/video/139909203?loop=1" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+        <div class="embed-container v3" style="text-align: center;"><iframe src="http://player.vimeo.com/video/35565030?loop=1" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+      </div>
+
+
         <!-- <p class="title">CONTACTS</p> -->
+
         <div id="footer">
+        <!-- <p class="title">CONTACT</p>  -->
         <div class="socials hover-1" id="logo-fb"><a href="https://www.facebook.com/thesarco/" target="_blank">
           <img src="img/logo_fb.png"/></a>
         </div>
         <div class="socials hover-1" id="logo-insta"><a href="https://www.instagram.com/iamsarco" target="_blank">
           <img src="img/logo_insta.png"/></a>
         </div>
-        <div class="hover-1" id="logo-email"><a href="mailto:thesarco@gmail.com">
+        <div class="socials hover-1" id="logo-email"><a href="mailto:thesarco@gmail.com">
           <img src="img/email.png"/></a>
         </div>
         <div class="lost hover-1"><a href="http://www.lostconversation.com" target="_blank">
@@ -121,7 +151,8 @@
       
       </div>
       </div>
-  </div></div>
+  <!-- </div> -->
+  </div>
 
 
  
@@ -132,14 +163,49 @@
   <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
   <script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script>
 
-  <script src="js_over/particles.js"></script>
-  <script src="js_over/finding.js"></script>
+<!--   // <script src="js_over/particles.js"></script>
+  // <script src="js_over/finding.js"></script> -->
 
   <!-- // <script src="js/Projector.js"></script> -->
   <!-- // <script src="http://threejs.org/examples/js/libs/stats.min.js"></script> -->
   <script src="js/OrbitControls_old.js"></script>
+  <script src="js/soundcloud.js"></script>
   <script src="js/stage.js"></script>
   <script src="js/main.js"></script>
+
+
+<script>
+
+// var iframe = document.querySelector('#player');
+// var sc = SC.Widget(iframe);
+
+// sc.bind(SC.Widget.Events.READY, function() {
+//     // var d = document.createTextNode('Ready');
+//     // document.querySelector('body').appendChild(d);
+// });
+
+// document.querySelector('button').addEventListener('click', function() {
+//     sc.play();
+// });
+
+
+// back to top internal page
+$('#about').scroll(function(){
+  console.log($('#about').scrollTop())
+    if ($('#about').scrollTop() > 200) {
+      $('#btnTop').fadeIn();
+    } else {
+      $('#btnTop').fadeOut();
+    }
+  });
+  
+  //Click event to scroll to top
+  $('#btnTop').click(function(){
+    $('#about').animate({scrollTop : 0},800);
+    return false;
+  });
+
+</script>
 
 
 
