@@ -2,10 +2,24 @@
   margin: 0;
   padding: 0; 
 }
+.btnT{
+    opacity: .5;
+  }
+
+.scrollable {
+    position: absolute;
+    /*top: 50px;*/
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
 
 /* Icon 1 */
 
 #nav-icon {
+  margin-top: -28px;
   pointer-events: all !important;
   width: 80px;
   height: 85px;
@@ -25,6 +39,7 @@
   
 }
 #nav-icon:hover{
+
 opacity: 1;
 /*width: 20%;*/
 /*margin-left: -10px;*/
@@ -58,7 +73,7 @@ opacity: 1;
 }
 
 #nav-icon span:nth-child(1) {
-  top: 0px;
+  top: 20px;
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
   -o-transform-origin: left center;
@@ -66,7 +81,7 @@ opacity: 1;
 }
 
 #nav-icon span:nth-child(2) {
-  top: 18px;
+  top: 38px;
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
   -o-transform-origin: left center;
@@ -74,7 +89,7 @@ opacity: 1;
 }
 
 #nav-icon span:nth-child(3) {
-  top: 36px;
+  top: 56px;
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
   -o-transform-origin: left center;
@@ -86,7 +101,7 @@ opacity: 1;
   -moz-transform: rotate(45deg);
   -o-transform: rotate(45deg);
   transform: rotate(45deg)scale(10,1);
-  top: -9px;
+  top: 9px;
   left: 8px;
 }
 
@@ -100,7 +115,7 @@ opacity: 1;
   -moz-transform: rotate(-45deg);
   -o-transform: rotate(-45deg);
   transform: rotate(-45deg)scale(10,1);
-  top: 47px;
+  top: 67px;
   left: 8px;
 }
 
@@ -117,11 +132,53 @@ opacity: 1;
 }
 
 
+/*.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 25px;
+  height: 0;
+      margin-bottom: 100px;
+}
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}*/
+
+#btnTop{
+      position: fixed;
+    float: right;
+    bottom: 20px;
+    right: 40px;
+    width: 50px !important;
+    /*opacity: 0;*/
+}
+
+.embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin-bottom: 200px;
+}
+
+.embed-container iframe, .embed-container object, .embed-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
 @media 
       (-webkit-min-device-pixel-ratio: 2), 
       (min-resolution: 192dpi) { 
         #container{
-          -ms-transform: scale(2, 2) translate(12.5vw, 12.5vh); /* IE 9 
+          -ms-transform: scale(2, 2) translate(12.5vw, 12.5vh); /* IE 9 */
           -webkit-transform: scale(2, 2) translate(12.5vw, 12.5vh); /* Safari */
           transform: scale(2, 2) translate(12.5vw, 12.5vh);
       }}
@@ -130,6 +187,45 @@ opacity: 1;
 
 
 @media screen and (max-width:550px){
+  #drag{
+        margin-bottom: -55px;
+        
+      }
+
+  .embed-container{
+    margin-bottom: 100px;
+  }
+  #embed{
+          width: 80%;
+          left: 50%;
+          margin-left: -40%;
+          /*bottom: -4% !important;*/
+        }
+  #embed iframe{
+    height: 130px !important;
+  }
+  #backText{
+    opacity: .3 !important;
+    margin-top: 38px;
+  }
+
+  #finding {
+    /* margin-top: -200px; */
+    top: 8%;
+}
+
+  .v2, .v3{
+    width: 100% !important;
+    padding-bottom: 56.25% !important;
+  }
+
+  #btnTop{
+    -ms-transform: scale(.6, .6);
+    -webkit-transform: scale(.6, .6);
+    transform: scale(.6, .6);
+    right: 20px;
+    z-index: 33;
+  }
 
   #logo-0 {
       position: absolute;
@@ -143,28 +239,53 @@ opacity: 1;
     /*position: absolute;*/
     /*bottom:50px;*/
   }
-  #socials{
+/*  #socials{
       -ms-transform: scale(.4, .4);
           -webkit-transform: scale(.4, .4);
           transform: scale(.4, .4);
           margin-top: -150px;
-  }
+
+  }*/
   /*#lost{
     position: absolute;
     float: right;
   }*/
 
   #nav-icon{
-    width: 75px;
-      height: 75px !important;
-    margin-right: -10px;
+    width: 60px !important;
+    height: 95px !important;
+    margin-right: -25px;
+    margin-top: -47px !important;
+    padding: 20px;
     /*bottom: 0;*/
       
 
   }
-  /*#nav-icon span{
+  .soundIco{
+    /*width: 60px !important;
+    height: 95px !important;
+    margin-right: -25px;
+    margin-top: -7px !important;
+    padding: 20px;
+    /*bottom: 0;*/
+  }
+  #nav-icon.open span:nth-child(1) {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg)scale(7,1);
+  top: 19px;
+  left: 20px;
+}
 
-  }*/
+#nav-icon.open span:nth-child(3) {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg)scale(7,1);
+  top: 70px;
+  left: 20px;
+}
   
   #about{
     padding: 0px 20px;
@@ -190,6 +311,7 @@ opacity: 1;
   }*/
   .socials {
         margin-left: 8%;
+            margin-top: 30px;
   }
 /*  #socials{
     margin-top: -250px;
@@ -211,14 +333,19 @@ opacity: 1;
       right: 0;
       margin-bottom: 120px;
   }
-
-.audio img {
-    width: 100%;
+#audioPlayer{
+  margin-top: 35px;
 }
-#audio {
+/*.audio img {
+    margin-top: 30px;
+}*/
+/*#audio {
     margin-top: 50px;
     margin-bottom: 0px;
     padding-left: 0px;
+}*/
+.playIco{
+  margin-bottom: 40px !important;
 }
 #logo-spotify {
     display: block;
@@ -244,8 +371,8 @@ opacity: 1;
     display: block;
     left: 0;
     margin-left: 0;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 .lost{
   float: none;
@@ -255,6 +382,34 @@ opacity: 1;
 }
 
 @media screen and (max-width:1024px) and (min-width:550px){
+
+  #embed{
+          width: 60%;
+          left: 50%;
+          margin-left: -30%;
+          /*bottom: -4% !important;*/
+        }
+
+#embed iframe{
+    height: 280px !important;
+  }
+
+  #finding {
+    /* margin-top: -200px; */
+    /*top: 15%;*/
+}
+
+   #btnTop{
+    -ms-transform: scale(.8, .8);
+    -webkit-transform: scale(.8, .8);
+    transform: scale(.8, .8);
+    right: 20px;
+    z-index: 33;
+
+    /*opacity: .3;*/
+  }
+
+
 #about{
   padding: 50px 80px;
 }

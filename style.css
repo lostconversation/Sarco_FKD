@@ -1,6 +1,7 @@
 body {
     padding: 0;
-    margin: 0;
+    /*background-color: green;*/
+    margin: 0 auto;
     overflow: hidden;
     cursor: default;
       }
@@ -13,11 +14,98 @@ body {
 			z-index: 200;
 			top: 0;
 			margin: 35px 0;
+			/*margin: */
 			pointer-events: none;
 		}
 	  svg {
 			fill: white;
 		}
+		*:focus {
+		    outline: none;
+		}
+		.soundIco {
+                position: absolute;
+                /*right: 0;*/
+    			margin-right: 24px;
+			    margin-top: -3px;
+			    margin-left: 16px;
+                width: 30px;
+                opacity: 1;
+                pointer-events: all;
+                cursor: pointer;
+            }
+            .s1{
+            	/*opacity: 0;*/
+            }
+            .soundIco:hover{
+                opacity: .5 !important;
+                cursor: pointer;
+            }
+
+            .soundIco:focus{
+                opacity: .5 !important;
+            }
+		.v1 iframe{
+		/*height: 100% !important;*/
+		}
+		.v2{
+			display: inline-block;
+			width: 47% !important;
+			float: left;
+			/*height: 50px;*/
+			margin-bottom: 200px !important;
+			padding-bottom: 30% !important;
+			margin-right: 6%;
+		}
+		.v3{
+			/*display: inline-block;
+			width: 40% !important;*/
+			/*clear: right;*/
+			width: 47% !important;
+			margin-bottom: 200px !important;
+			padding-bottom: 30% !important;
+		}
+		.playIco{
+			width: 70px;
+			display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+		    margin-bottom: 8%;
+		    pointer-events:all;
+		    cursor: pointer;
+		}
+		#audioPlayer{
+			    /*position: absolute;*/
+			    width: 100%;
+			    margin-top: 80px;
+			    /*left: 50%;
+			    margin-left: -25%;*/
+			    bottom: 10%;
+			    pointer-events: none;
+			    /*z-index: 55;*/
+			    /*opacity: .3;*/
+			    -webkit-transition: all 1s ease-out;
+		    -moz-transition: all 1s ease-out;
+		    -ms-transition: all 1s ease-out;
+		    -o-transition: all 1s ease-out;
+		    transition: all 1s ease-out;
+		}
+
+		.coverPlayer{
+			/*position: absolute;*/
+			    /*width: 100%;*/
+			display: block;
+			margin-top: 10px;
+		    margin-left: auto;
+		    margin-right: auto ;
+		    width: 100%;
+		    max-width: 750px;
+
+		}
+
+		#embed iframe{
+    height: 280px;
+  }
 
 		#particle{
 	      /*background-color: rgba(0,0,0,0);*/
@@ -27,15 +115,17 @@ body {
 	      position: absolute;
 	      pointer-events: none;
 	      z-index: -11;
-	      opacity: .2;
+	      opacity: .1;
 	      /*display: block;*/
 	    }
 	    #finding, #knowing, #delight{
 	    	z-index: 10;
 	    	pointer-events: none;
+	    	overflow: scroll;
 	    }
 	    #finding{
-	    	margin-top: -25px;
+	    	/*margin-top: -200px;*/
+	    	top: 8%;
 	    }
 	    #knowing{
 	    	margin-top: -45px;
@@ -54,7 +144,7 @@ body {
 			font-family: 'Oswald', sans-serif;
 			font-weight: 100;
 			font-size: 16px;
-			color: white;
+			color: black;
 			/*display: none;*/
 			text-align: center !important;
 			letter-spacing: 2px;
@@ -65,10 +155,40 @@ body {
    			right: 0;
             top:   50%;
 		}
+		#FKD{
+			color: white !important;
+			/*opacity: 0 !important;*/
+		}
+		#drag{
+        width:100px;
+        position: absolute;
+        font-family: Oswald;
+        letter-spacing: 1px;
+        color: white;
+        pointer-events: none;
+        left:50%;
+        margin-left:-39px; 
+        margin-bottom: -15px;
+        
+      }
+      .blink_me {
+        position: absolute;
+        margin: 0;
+        bottom: 50%;
+        /*top:0;*/
+        left:0;
+        right:0;
+        animation: blinker .2s linear infinite;
+      }
+
+      @keyframes blinker {  
+        20% { opacity: 0; }
+      }
+
 		#FKD.zoom {
-		  
 		  font-size: 32px !important; 
 		}{
+
 
 		}
 		.title{
@@ -78,23 +198,35 @@ body {
 			margin-bottom: 30px;
 			margin-top: 50px;
 		}
-		#back{
+		#back, #backText{
 			font-family: 'Oswald', sans-serif;
-			width: 100px;
+			width: 40px;
 			position: absolute;
-		    font-size: 14px;
+		    font-size: 10px;
 		    text-align: center;
-		    letter-spacing: 1px;
+		    letter-spacing: 2px;
 		    left: 50%;
 		    right: 0;
-		    margin-left: -50px;
-		    /*margin-top: 90px;*/
+		    margin-left: -21px;
+		    cursor: pointer;
 		    pointer-events: all !important;
-		    bottom: 20px;
-			z-index: 2;
+		    margin-top: 28px;
+			z-index: 22;
 			opacity: 0;
 			
 		}
+		#backText{
+			opacity: 0;
+			top: 1px;
+    		padding-left: 2px;
+
+		}
+
+		#back:hover, #backText:hover, #back:hover ~ #backText {
+			 opacity: 1 !important;
+		}
+
+
 		#back:hover{
 			cursor: pointer;
 			opacity: .5;
@@ -133,19 +265,22 @@ body {
 	    
 	  }
       #container{
-      position:absolute; 
-      margin: 0;
-      height: 50%;
+      position: absolute; 
+      margin: 0 auto;
+      /*height: 50%;*/
       /*display: block;
       overflow: hidden;*/
+      /*overflow: scroll;*/
+      }
+      #content{
+      	overflow: scroll;
+      	height: 0;
       }
       .float-right {
 			float: right;
-			opacity:1;
-			/*transition: opacity .4s linear;*/
-			width: 	40px;
+			/*width: 	40px;
 			margin-top: -20px;
-			margin-right: 25px;
+			margin-right: 25px;*/
 			cursor: pointer;
 
 		}
@@ -179,37 +314,44 @@ body {
 			text-transform: uppercase;
 		}
 		#about {
-			overflow: auto;
+			margin: 0;
+			/*margin-top: -10px;*/
+			overflow: scroll;
 			position: absolute;
-			padding: 20px 150px;
+			padding: 100px 150px;
+			/*bottom: 0;*/
 			z-index: 20;
-			display: none;
+			display:  none;
 			color: white;
-			height: 100%;
+			height: 100vh;
 			background-color: rgb(0, 0, 0);
 			pointer-events:none;
 			color: white;
+			/*padding-top: 150px;*/
+			color: #999999;
+			font-size: 14px;
 			font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
 			"Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
 			"Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+			-webkit-overflow-scrolling: touch;
 		}
 
-		#about-container {
+		/*#about-container {
 			/*margin: 10vh 0;*/
-			margin-top: 150px;
-			color: #999999;
+			/*margin-top: 150px;
+			color: #999999;*/
 			/*padding-bottom: 30px;*/
 
-		}
+		/*}*/
 		@-moz-document url-prefix() {
-		    #about-container {padding-bottom:30px;}
+		    #about {padding-bottom:30px;}
 		}
 
 		#footer{
-			/*position: fixed;*/
-			height: 90px;
+			/*position: absolute;*/
+			height: 75px;
 		    bottom: 0;
-		    /*margin-bottom: 30px;*/
+		    margin-bottom: 60px;
 		    width: 100%;
 		}
 
@@ -287,12 +429,18 @@ body {
 	        /*margin-left: -30px;*/
 		}
 		#logo-email{
-			    position: relative;
+			    /*position: relative;
 			    display: inline-block;
 			    left: 50%;
-			    margin-left: -92px;
+			    margin-left: -92px;*/
 		}
-		#logo-email img{
+		#logo-email-bio{
+			    /*position: relative;*/
+			    display: inline-block;
+			    left: 0;
+			    /*margin-left: -92px;*/
+		}
+		#logo-email img, #logo-email-bio img{
 			max-width: 25px;
 		}
 		
