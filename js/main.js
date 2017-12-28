@@ -135,7 +135,7 @@ function onMouseMove( event ){
   if (clickTime == 0){
     $("#drag").css({
        left:  event.pageX,
-       top:   event.pageY-25
+       top:   event.pageY-65
     });
     $('html,body').css('cursor', 'pointer');
 
@@ -152,7 +152,7 @@ function onMouseMove( event ){
 
 function onMouseUp( event ){
   isDragged = 0;
-  mouseDown=0;
+  mouseDown = 0;
   if (/Mobi/.test(navigator.userAgent)) {
     if (hovering==1){
       
@@ -177,7 +177,7 @@ function onMouseUp( event ){
     // console.log(xx, mouseClickX, mouse.x)
  
   // console.log(xx)
-  if (xx > 0.02 || yy > 0.02){
+  if (xx > 0.04 || yy > 0.04){
     flag=1;
     
   }else{
@@ -245,6 +245,8 @@ function onMouseUp( event ){
               var cover = document.getElementById('coverPlayers');
               cover.src="img/1_The_Finding.jpg";
               var newTextTitle = "THE FINDING";
+              var epText = document.getElementById('EPtext').textContent='Listen to the EP "THE FINDING"';
+              
             } else if(hit=="T tri"){
               xx = -363;
               yy = 143;
@@ -255,6 +257,7 @@ function onMouseUp( event ){
               cover.src="img/3_The_Delight.jpg";
               cover.style.opacity=1;
               var newTextTitle = "THE DELIGHT";
+              var epText = document.getElementById('EPtext').textContent='Listen to the EP "THE DELIGHT"';
             } else if(hit=="C Tube"){
               xx = -217;
               yy = 107;
@@ -263,11 +266,12 @@ function onMouseUp( event ){
               var cover = document.getElementById('coverPlayers');
               cover.src="img/2_The_Knowing.jpg";
               var newTextTitle = "THE KNOWING";
+              var epText = document.getElementById('EPtext').textContent='Listen to the EP "THE KNOWING"';
             }
             
             $('html,body').css('cursor', 'default');
             controls.enabled = false;
-            
+
               if (!prevEP){
               } else {
                 var EPtitle = document.getElementById('EPtitle').textContent = newTextTitle;

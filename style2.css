@@ -148,7 +148,7 @@ opacity: 1;
 }*/
 
 #btnTop{
-      position: fixed;
+    position: fixed;
     float: right;
     bottom: 20px;
     right: 40px;
@@ -186,7 +186,18 @@ opacity: 1;
 
 
 
-@media screen and (max-width:550px){
+@media screen and (max-width:550px){ 
+
+  #EPtext{
+        margin-bottom: 20 %;
+      font-size: 12px;
+    }
+
+  .coverPlayer{
+        width: 100%;
+        margin-bottom: 0;
+    }
+
   #drag{
         margin-bottom: -55px;
         
@@ -288,7 +299,7 @@ opacity: 1;
 }
   
   #about{
-    padding: 0px 20px;
+    padding: 50px 20px;
     font-size:12px;
   }
   #about-container{
@@ -365,6 +376,7 @@ opacity: 1;
     left: 33%;
 }
 #footer {
+    height: 350px;
     text-align: center;
 }
 #logo-email {
@@ -411,10 +423,11 @@ opacity: 1;
 
 
 #about{
-  padding: 50px 80px;
+  padding: 20px 80px;
 }
 #about-container{
     margin-top: 100px;
+    /*margin-bottom: 100px;*/
 }
 .lost {
 height: 130px;
@@ -424,7 +437,7 @@ height: 130px;
   margin-top: 20px;
 }
 #footer{
-      margin-bottom: 50px;
+      margin-bottom: 150px;
 }
 .btn{
   width: 120px;
