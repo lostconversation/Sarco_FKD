@@ -16,6 +16,9 @@ var circleClick = [];
 var clickTime = 1;
 var inside = 0;
 var page;
+var maxVolume = .6;
+var fadeVolume = 50;
+var currentEP = 1;
 var mouseDown = 0;
 var showDrag = 1;
 var movingMouse = 0;
@@ -42,6 +45,7 @@ var firstTime = 1;
 var menu=0;
 var flag = 0;
 var sound = 0;
+var soundLoaded = 0;
 
 
 var query = "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
@@ -77,6 +81,14 @@ hhh = window.innerHeight/2;
 
 
 $(document).ready(function(){
+
+// var audio_preload = 0;
+// function launchApp(launch){
+//   audio_preload++;
+//   if ( audio_preload == 3 || launch == 1) {  // set 3 to # of your files
+//     start();  // set this function to your start function
+//   }
+
 $('#btnTop').fadeOut();
   $('#nav-icon').click(function(){
     $(this).toggleClass('open');
@@ -221,33 +233,73 @@ function onMouseUp( event ){
           // new TWEEN.TweenMax.to(KFD, .2, {transformPerspective:1000,scale:1, autoAlpha: 1,
           // transformOrigin:"50% 50%"});  
           // new TWEEN.Tween( FKD.position).to({ x: 0, y: 1330}, 2000 ).easing(TWEEN.Easing.Quartic.InOut).start()
+          var prevEP = currentEP;
+          var prevAudio = eval("this.audio" + currentEP);
+
           if(hit=="Q quad"){
               xx = 150;
               yy = -48;
               zz = 305;  
-              
-              // page = document.getElementById('finding');
+              currentEP=1;
+              // audio.src=ep1;
+              var cover = document.getElementById('coverPlayers');
+              cover.src="img/1_The_Finding.jpg";
+              var newTextTitle = "THE FINDING";
             } else if(hit=="T tri"){
               xx = -363;
               yy = 143;
               zz = -46;
-              // page = document.getElementById('delight');
+              currentEP=3;
+              // audio.src=ep2;
+              var cover = document.getElementById('coverPlayers');
+              cover.src="img/3_The_Delight.jpg";
+              cover.style.opacity=1;
+              var newTextTitle = "THE DELIGHT";
             } else if(hit=="C Tube"){
               xx = -217;
               yy = 107;
               zz = 185;
-              // page = document.getElementById('knowing');
+              currentEP=2;
+              var cover = document.getElementById('coverPlayers');
+              cover.src="img/2_The_Knowing.jpg";
+              var newTextTitle = "THE KNOWING";
             }
+            
             $('html,body').css('cursor', 'default');
             controls.enabled = false;
-              // page = document.getElementById('finding');
-              
-              // audioPlayer.style.opacity= "0";
+            
+              if (!prevEP){
+              } else {
+                var EPtitle = document.getElementById('EPtitle').textContent = newTextTitle;
+                if (sound == 1 && currentEP != prevEP){   
+                  var EPtitle = document.getElementById('EPtitle').style.opacity=0;
+                  if (/Mobi/.test(navigator.userAgent)) {
+                      prevAudio.pause(); 
+                  }else{
+                    var fadeOut = setInterval(function(){
+                            prevAudio.volume-=.01;
+                            if (prevAudio.volume <= 0.01){
+                              // console.log("done")
+                              prevAudio.pause(); 
+                              clearInterval(fadeOut);
+                              prevAudio.volume=maxVolume;
+                              var EPtitle = document.getElementById('EPtitle').textContent = newTextTitle;
+                            }
+                          },fadeVolume/2);
+                  }
+                  playSound(sound);
+                }
+              }
               
               camDolly(100);
+              
               var logo = document.getElementById('logoSvg');
               logo.style.opacity=0;
             new TWEEN.Tween( camera.position).to({ x: xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
+              // console.log(prevEP, currentEP)
+              
+              page = document.getElementById('finding');
+              page.style.opacity=1; 
               var FKD = document.getElementById('FKD');
               FKD.style.opacity=0; 
               var back = document.getElementById('back');
@@ -256,9 +308,7 @@ function onMouseUp( event ){
                 back.style.opacity=0;
               }else{
                 back.style.opacity=1;
-              }
-              
-              
+              }    
               var backText = document.getElementById('backText');
               backText.style.visibility="visible"; 
               if(/Mobi/.test(navigator.userAgent)) {
@@ -266,13 +316,18 @@ function onMouseUp( event ){
               }else{
                 backText.style.opacity=0;
               }
-              
+               
+
               var menuu = document.getElementsByTagName('span');
               menuu[0].classList.add('colorBlack');
               menuu[1].classList.add('colorBlack');
               menuu[2].classList.add('colorBlack');
 
-              
+              var soundIco = document.getElementsByClassName('soundIco');
+              soundIco[0].style.stroke="black"; // [1] è il sound_no.svg
+              var EPtitle = document.getElementById('EPtitle');
+              EPtitle.style.color="black";
+            
               
               var dollyN = 1;
               camDolly(40)
@@ -282,14 +337,11 @@ function onMouseUp( event ){
                 controls.dollyIn(dollyN);
                   if (dollyN >=1.0013){
                 dollyN=1;
-                      page = document.getElementById('finding');
-                      page.style.color="black";
-                      page.style.opacity=1; 
-                      
-              
-                      var audioPlayer = document.getElementById('audioPlayer');
-                      audioPlayer.style.visibility="visible"; 
+                      var audioPlayer = document.getElementById('coverPlayers');
                       audioPlayer.style.opacity=1; 
+                      var playIcoSvg = document.getElementById('playIco');
+                      playIcoSvg.style.pointerEvents = "all";
+                      playIcoSvg.style.opacity=1; 
                 clearInterval(dolly);
                   }
                 }, 8);
@@ -360,7 +412,7 @@ function rayCastDrag( event ){
         if ( intersects.length > 0 ) {
           // console.log(intersects[ 0 ])
           var geometry = new THREE.SphereGeometry( .005*distance,19,16 );
-          var material1 = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: .1, wireframe:true} );
+          var material1 = new THREE.MeshBasicMaterial( { color: 0x2fe2e3, transparent: true, opacity: .1, wireframe:true} );
           var circle1 = new THREE.Mesh( geometry, material1 );
           // circle1.position.copy( inte.point );
           circle1.lookAt(camera.position);
@@ -379,7 +431,7 @@ function rayCastDrag( event ){
             scene.remove(circle1);
             clearInterval(stuff);
           }
-          },5)
+          },2)
           }
  }
 
@@ -391,7 +443,7 @@ const begin = camera.position.clone();
 var position = new THREE.Vector3(XX,YY,ZZ);
 
 new TWEEN.Tween(begin)
-  .to(position, 200)
+  .to(position, 2000)
   .easing(TWEEN.Easing.Quartic.InOut)
   .onUpdate(function() {
     camera.position.set(this.x, this.y, this.z)//.normalize().negate();
@@ -428,6 +480,11 @@ function camBack(page){
   //                 'pointer-events': 'none',
   //                 'z-index': '-11'
   //               });
+  var playIcoSvg = document.getElementById('playIco');
+  playIcoSvg.style.pointerEvents = "none";
+  playIcoSvg.style.opacity=0; 
+  var cover = document.getElementById('coverPlayers');
+  cover.style.opacity=0;
   var FKD = document.getElementById('FKD');
   FKD.style.opacity=.2;
   FKD.classList.remove('zoom');
@@ -435,6 +492,8 @@ function camBack(page){
   back.style.visibility="hidden"; 
   var backText = document.getElementById('backText');
   backText.style.visibility="hidden"; 
+  var EPtitle = document.getElementById('EPtitle');
+      EPtitle.style.color="white";
   var menuu = document.getElementsByTagName('span');
               menuu[0].classList.remove('colorBlack');
               menuu[1].classList.remove('colorBlack');
@@ -443,10 +502,10 @@ function camBack(page){
   // var FKD = document.getElementById('FKD')
   // FKD.style.color="white";
   
-  page.style.opacity=0; 
+  page.style.opacity=0; // page è #finding
   
-  var audioPlayer = document.getElementById('audioPlayer');
-      audioPlayer.style.visibility="hidden"; 
+
+
   var dollyN = 1;
   setTimeout(function(){
   var dolly = setInterval(function(){
@@ -461,7 +520,9 @@ function camBack(page){
       
       controls.enabled = true;
       var logo = document.getElementById('logoSvg');
-                    logo.style.opacity=1;
+          logo.style.opacity=1;
+      var soundIco = document.getElementsByClassName('soundIco');
+              soundIco[0].style.stroke="white"; // [1] è il sound_no.svg
       new TWEEN.Tween( camera.position).to({ x:  xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
                 // camDolly(70)
                 clickTime = 0;
@@ -501,21 +562,32 @@ function zoom(){
 function Sound() {
     // this.name = name;
     // audio = scene.getObjectById( 'audio');
-    audio = document.createElement('audio');
-    audioSfx1 = document.createElement('audio');
-    audioSfx2 = document.createElement('audio');
-    audioSfx3 = document.createElement('audio');
-    var rand = Math.floor(Math.random() * 2)+1;
-    audio.src = 'audio/1_Finding.mp3';
-    audio.volume=.8;
-    audio.loop=false;
-    audio.onended = function() {
-    // rand+=1;
-    // if (rand == 3) rand=1;
-    // audio.src = 'audio_1/Cassini_'+rand+'.mp3';
-    audio.play();
-    };
-    container = document.querySelector('#cont');
+    // audio = document.createElement('audio');
+    audio1 = document.createElement('audio');
+    audio2 = document.createElement('audio');
+    audio3 = document.createElement('audio');
+    // var rand = Math.floor(Math.random() * 2)+1;
+    // audio.src = currentEP;
+    // console.log(audio.src)
+    audio1.src = "audio/1_The_Finding.mp3";
+    audio2.src = "audio/2_The_Knowing.mp3";
+    audio3.src = "audio/3_The_Delight.mp3";
+    // audio = currentAudio;
+    audio1.volume=maxVolume;
+    audio1.loop=true;
+    audio2.volume=maxVolume;
+    audio2.loop=true;
+    audio3.volume=maxVolume;
+    audio3.loop=true;
+
+    // // this.audio.play();
+    // audio.onended = function() {
+    // // rand+=1;
+    // // if (rand == 3) rand=1;
+    // // audio.src = 'audio_1/Cassini_'+rand+'.mp3';
+    // audio.play();
+    // };
+    // container = document.querySelector('#cont');
     // stats = new Stats();
     // container.appendChild( stats.dom );
     // $("#statsDiv").hide();
@@ -533,21 +605,61 @@ function playSound(sound){
   // console.log(SC.pause());
   //   SC.pause();
     this.sound=sound;
+    this.maxVolume=maxVolume;
+    var icoPlay = document.getElementById('icoPlay');
+    var icoPause = document.getElementById('icoPause');
+    if (soundLoaded == 0){
+      var soundIco = document.getElementById('sound_no');
+          soundIco.style.opacity=1;
+    soundLoaded = 1;
     // console.log(sound)
-    if (sound==1){
-        this.audio.pause();
+    }
+    var soundIcoBar = document.getElementById('g2');
+    if (this.sound==1){ //-------------- PAUSE
+        var audio = eval("this.audio" + currentEP);
+        clearInterval(fadeIn);
+        clearInterval(fadeOut);
+        if (/Mobi/.test(navigator.userAgent)) {
+            audio.pause(); 
+        }else{
+          var fadeOut = setInterval(function(){
+                  audio.volume-=.01;
+                  if (audio.volume <= 0.01){
+                    // console.log("done")
+                    audio.pause(); 
+                    clearInterval(fadeOut);
+                    audio.volume=maxVolume;
+                  }
+                },fadeVolume/2);
+        }
         this.sound=0;
-        $('.s0').fadeIn();
-        $('.s1').fadeOut();
-        // $('.soundIco').attr('xlink:href', 'img/sound_no.svg');
-        $('.soundIco').removeAttr('id', 'focusP');
-        // $('.s1').removeAttr('id', 'focusP');
-    }else if (sound==0){
-        this.audio.play();  
+        soundIcoBar.style.opacity=1;
+        icoPause.style.opacity=0;
+        icoPlay.style.opacity=1;
+        var EPtitle = document.getElementById('EPtitle');
+        EPtitle.style.opacity=.2;
+    }else if (this.sound==0){ //-------------- PLAY
+        var audio = eval("this.audio" + currentEP);
+        clearInterval(fadeIn);
+        clearInterval(fadeOut);
+        
+         
+        audio.volume=0;
+        audio.play(); 
+        var fadeIn = setInterval(function(){
+          audio.volume+=.01;
+          if (audio.volume >= maxVolume){
+            // console.log("done") 
+            clearInterval(fadeIn);
+            audio.volume=maxVolume;
+          }
+        },fadeVolume);
         this.sound=1;
-        $('.s0').fadeOut();
-        $('.s1').fadeIn();
-        $('.soundIco').attr('id', 'focusP');
+        soundIcoBar.style.opacity=0;
+        icoPause.style.opacity=1;
+        icoPlay.style.opacity=0;
+        var EPtitle = document.getElementById('EPtitle');
+        EPtitle.style.opacity=1;
     }
 } 
 
@@ -577,12 +689,13 @@ controls = new THREE.OrbitControls( camera, container );
 controls.enableDamping = true;
 controls.minPolarAngle = 0.4;
 controls.maxPolarAngle = 2.5;
-controls.dampingFactor = 0.06;
-controls.rotateSpeed = 0.05;
+controls.dampingFactor = .2;
+controls.rotateSpeed = 0.04;
 controls.enableZoom = true;
 controls.zoomSpeed = .2; // 1.0 is default
 controls.minDistance = 200;
 controls.maxDistance = 3000;
+controls.enablePan = false;
 
 // lights
 var sphere = new THREE.SphereGeometry( 32, 16, 8 );
@@ -634,9 +747,9 @@ light2.position.set( -200, -250, 80 );
 
 function obj1(){
 
-  var geometry = new THREE.PlaneGeometry( 6000, 6000 );
-var material1 = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0.3, alphaTest: 0, visible: false } );
-flatT = new THREE.Mesh( geometry, material1 );
+var geometry = new THREE.PlaneGeometry( 6000, 6000 );
+var materialINV = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0.3, alphaTest: 0, visible: false } );
+flatT = new THREE.Mesh( geometry, materialINV );
 // circle1.position.copy( inte.point );
 flatT.lookAt(camera.position);
 flatT.name="flatTarget";
@@ -707,7 +820,6 @@ var loaderQ1 = new THREE.OBJLoader( );
         object.name="q1";
         cluster.add( object );
         objects.push( object );
-        // ooo+=1;
 });
 
 
@@ -821,6 +933,9 @@ function about(){
       var logo = document.getElementById('logoSvg');
       logo.style.opacity=0;
       }  
+      var soundIco = document.getElementsByClassName('soundIco');
+      soundIco[0].style.stroke="white";
+      console.log(soundIco[0])
       var menuu = document.getElementsByTagName('span');
               menuu[0].classList.remove('colorBlack');
               menuu[1].classList.remove('colorBlack');
@@ -836,8 +951,12 @@ function about(){
     if (inside==0){
     var logo = document.getElementById('logoSvg');
     logo.style.opacity=1;
+    var soundIco = document.getElementsByClassName('soundIco');
+      soundIco[0].style.stroke="white";
     clickTime = 0;
     } else if (inside==1){
+      var soundIco = document.getElementsByClassName('soundIco');
+      soundIco[0].style.stroke="black";
     var menuu = document.getElementsByTagName('span');
               menuu[0].classList.add('colorBlack');
               menuu[1].classList.add('colorBlack');
