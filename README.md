@@ -1,2 +1,5 @@
-# 3dTracer + Soundcloud
-contains 3d tracer, audio player for one mp3
+# Fine tuned version
+
+canvas drawing after click
+
+no enter the elements

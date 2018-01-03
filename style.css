@@ -2,9 +2,9 @@ body {
     padding: 0;
     /*background-color: green;*/
     margin: 0 auto;
-    overflow-y: scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
-    cursor: default;
+    cursor: crosshair;
       }
       header{
 			display: block;
@@ -24,14 +24,42 @@ body {
 		*:focus {
 		    outline: none;
 		}
+		#T-title{
+				
+			    position: absolute;
+			    left: 50%;
+			    margin-left: -170px;
+			    width: 340px;
+			    margin-top: 22px;
+			    -webkit-transition: all 1s ease-in-out;
+		  -moz-transition: all 1s ease-in-out;
+		  -ms-transition: all 1s ease-in-out;
+		  -o-transition: all 1s ease-in-out;
+		  transition: all 1s ease-in-out;
+		}
+		#T-finding, #T-knowing, #T-delight{
+		opacity: .3;
+		pointer-events: all;
+		}
+		#T-finding:hover g, #T-knowing:hover g, #T-delight:hover g{
+			cursor: pointer;
+			/*opacity: .1;*/
+		}
 		#EPtext{
+			opacity: 0;
+			color: white;
 		    margin-bottom: 6%;
-			font-size: 13px;
+		    font-size: 13px;
+		    left: 50%;
+		    text-align: center;
+		    position: absolute;
+		    margin-left: -150px;
+		    width: 300px;
 		}
 		#EPtitle{
 			position: absolute;
 		    color: white;
-		    font-family: Oswald;
+		    font-family: 'Roboto Mono', monospace;
 		    font-size: 12px;
 		    letter-spacing: 2px;
 		    color: white;
@@ -89,8 +117,14 @@ body {
                 opacity: .5 !important;
             }*/
 
-		.v1 iframe{
-		/*height: 100% !important;*/
+		.v1{
+			display: inline-block;
+			width: 47% !important;
+			float: left;
+			/*height: 50px;*/
+			margin-bottom: 100px !important;
+			padding-bottom: 30% !important;
+			margin-right: 6%;
 		}
 		.v2{
 			display: inline-block;
@@ -109,9 +143,18 @@ body {
 			margin-bottom: 200px !important;
 			padding-bottom: 30% !important;
 		}
+		.v4{
+			/*display: inline-block;
+			width: 40% !important;*/
+			/*clear: right;*/
+			width: 47% !important;
+			margin-bottom: 100px !important;
+			padding-bottom: 30% !important;
+		}
 		#playIco{
+			opacity: 0;
 			fill: none;
-		    stroke: black;
+		    stroke: white;
 		    stroke-width: 10;
 		    stroke-linejoin: round;
 		    stroke-miterlimit: 10;
@@ -120,8 +163,8 @@ body {
 			display: block;
 		    margin-left: auto;
 		    margin-right: auto;
-		    margin-bottom: 0;
-		    margin-top: 6%;
+		    /*margin-bottom: 0;
+		    margin-top: 6%;*/
 		    pointer-events:all;
 		    cursor: pointer;
 		    
@@ -136,9 +179,17 @@ body {
 
 		}
 		#audioPlayer{
-			    width: 100%;
-			    bottom: 10%;
-			    pointer-events: none;
+				position: absolute;
+				width: 200px;
+    			margin-left: -100px;
+			    left: 50%;
+			    top: 45%;
+			    pointer-events: all;
+			    -webkit-transition: all 1s ease-in-out;
+			    -moz-transition: all 1s ease-in-out;
+			    -ms-transition: all 1s ease-in-out;
+			    -o-transition: all 1s ease-in-out;
+			    transition: all 1s ease-in-out;	
 		}
 
 		.coverPlayer{
@@ -189,6 +240,14 @@ body {
 	    #delight{
 	    	margin-top: -25px;
 	    }
+	    #isaac{
+	    	position: absolute;
+	    	width: 450px;
+		    left: 50%;
+		    margin-left: -225px;
+	    	bottom: 30px;
+	    	z-index: 44;
+	    }
 		#FKD, .inside{
 			-webkit-transition: all 1s ease-out;
 		    -moz-transition: all 1s ease-out;
@@ -197,7 +256,7 @@ body {
 		    transition: all 1s ease-out;
 			pointer-events: none;
 			position: absolute;
-			font-family: 'Oswald', sans-serif;
+			font-family: 'Roboto Mono', monospace;
 			font-weight: 100;
 			font-size: 16px;
 			color: black;
@@ -218,16 +277,18 @@ body {
 		#drag{
         width:100px;
         position: absolute;
-        font-family: 'Oswald', sans-serif;
+        font-family: 'Roboto Mono', monospace;
         font-weight: 100;
         letter-spacing: 1px;
+        line-height: 1;
         color: white;
         pointer-events: none;
         left:50%;
         margin-left:-42px; 
-        margin-bottom: -15px;
+        margin-bottom: -45px;
         text-align: center;
-        font-size: 14px;
+        font-size: 18px;
+        /*opacity: .5;*/
         
       }
       .blink_me {
@@ -237,11 +298,11 @@ body {
         /*top:0;*/
         left:0;
         right:0;
-        animation: blinker 1s linear infinite;
+        animation: blinker 1.5s linear infinite;
       }
 
       @keyframes blinker {  
-        20% { opacity: 0; }
+        70% { opacity: 0; }
       }
 
 		#FKD.zoom {
@@ -251,14 +312,14 @@ body {
 
 		}
 		.title{
-			font-family: 'Oswald', sans-serif;
+			font-family: 'Roboto Mono', monospace;
 			font-size: 22px;
 			color: white;
 			margin-bottom: 30px;
 			margin-top: 50px;
 		}
 		#back, #backText{
-			font-family: 'Oswald', sans-serif;
+			font-family: 'Roboto Mono', monospace;
 			width: 40px;
 			position: absolute;
 		    font-size: 10px;
@@ -356,7 +417,7 @@ body {
 			/*z-index: 200;*/
 		}
 		#logoSvg{
-			-webkit-transition: all .5s ease-in-out;
+			-webkit-transition: all 1s ease-in-out;
 		  -moz-transition: all 1s ease-in-out;
 		  -ms-transition: all 1s ease-in-out;
 		  -o-transition: all 1s ease-in-out;
@@ -388,10 +449,11 @@ body {
 			color: white;
 			/*padding-top: 150px;*/
 			color: #999999;
-			font-size: 14px;
-			font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
+			font-size: 12px;
+			font-family: 'Roboto Mono', monospace;
+			/*font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
 			"Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
-			"Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+			"Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;*/
 			-webkit-overflow-scrolling: touch;
 		}
 
