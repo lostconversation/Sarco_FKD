@@ -1,5 +1,4 @@
-# Fine tuned version
+# online version
 
-canvas drawing after click
-
-no enter the elements
+click and draw
+music player 6 tracks

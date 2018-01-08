@@ -6,11 +6,9 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
   <meta name="description" content="Italy based musician, producer and sound designer. Check the new Album available now on your favourite digital platform. Enter and discover Sarc:o’s music.">
   <title>Sarc:o</title>
-  <!-- <link href="https://fonts.googleapis.com/css?family=Oswald:100,200,300,700" rel="stylesheet"> -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="favicon.png"/>
   <link href="style.css" rel="stylesheet">
-  <link href="style2.css" rel="stylesheet">
   <meta name="google-site-verification" content="mmtspIPChyBQ6cCvuXCaYqOG7DUARFLweItsTpHFt4I" />
   <script type="text/javascript">
     
@@ -21,13 +19,13 @@
   
 <header>
     <div>
-             <div id="nav-icon" class="float-right" onclick="about();">
+             <div id="nav-icon" class="float-right animated" onclick="about();">
                <span id="span"></span>
                <span id="span"></span>
                <span id="span"></span>
             </div>
-            <span id="EPtitle" class="animated" style="opacity:0" onclick="playSound(sound)">listen to the EP</span>
-            <!-- <div id="sound">
+            
+            <div id="sound">
                   <svg id="sound_no" class="soundIco s1 svg animated" onclick="playSound(sound)" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
                       <g id="g1">
                         <path id="polygon1" d="M167.2,136.5l-48.8,42.3c-1.1,0.9-2.4,1.4-3.8,1.4H65.5c-3.2,0-5.9,2.6-5.9,5.9v55.2
@@ -38,7 +36,15 @@
                       </g>
                       <line id="g2" class="animated" x1="77" y1="312" x2="383" y2="109"/>
                 </svg>
-            </div> -->
+                <svg id="forward" class="animated" onclick="nextSong()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 380 220">
+                
+                  <g>
+                    <polygon class="st0" points="194.8,110.6 46.8,181.9 46.8,39.3     "/>
+                    <polygon class="st0" points="344.6,110.6 196.6,181.9 196.6,39.3     "/>
+                  </g>
+                </svg>
+                <span id="songTitle" class="animated unselectable" style="opacity:1">loading audio</span>
+            </div>
             
             
           
@@ -48,7 +54,7 @@
             <path d="M0 17.27h3.19V19c0 2.43 1.3 3.6 5.48 3.6h10.41c4.87 0 6.3-1 6.3-4.59 0-3.12-1.23-3.91-5.41-3.91H13.6C3.36 14.12 0 13.5 0 6.92 0 1.27 3.36 0 10.28 0h7.23c8.33 0 10.42 2.12 10.42 6.54v.86h-3.16c-.07-3.94-.48-4.66-9.28-4.66h-3.57c-6.48 0-8.77.34-8.77 4.42 0 2.95.92 3.94 6.17 3.94h9.94c6.54 0 9.28 1.88 9.28 6.1v1.61c0 6.1-5 6.54-10 6.54H9.25c-4.9 0-9.25-.85-9.25-6.27zm168-7.98C168 3 170.16 0 176.87 0h14.29c6.72 0 8.84 3 8.84 9.29v6.78c0 6.27-2.12 9.29-8.84 9.29h-14.29c-6.72 0-8.84-3-8.84-9.29zM196.64 8c0-4.32-2.6-5.28-5.82-5.28h-13.6c-3.22 0-5.82 1-5.82 5.28v9.32c0 4.32 2.6 5.28 5.82 5.28h13.6c3.22 0 5.82-1 5.82-5.28zM57.06.27h-4.18L38.14 25.08h3.81l3.09-5.24 1.62-2.74 8.31-14.08 8.31 14.08 1.61 2.74 1.48 2.5H49.75l-1.62 2.74h23.66L57.06.27m101.27 6.55h2.95v2.95h-2.95zm0 8.46h2.95v2.95h-2.95zm-6.76-6.99V6.17c0-3.32-1.68-6.17-7.78-6.17H130.5c-6.72 0-8.84 3-8.84 9.29v6.78c0 6.27 2.12 9.29 8.84 9.29h13.29c6.1 0 7.78-2.84 7.78-6.17v-2.13h-2.95v1.13c0 4.21-2.6 4.42-5.69 4.42h-12.09c-3.22 0-5.82-1-5.82-5.28V8c0-4.32 2.6-5.28 5.82-5.28h12.09c3.08 0 5.69.21 5.69 4.42v1.15zM110 9.32v-2c0-4.66-1.13-7-8.29-7H81.84v24.76h3.36V3h15.28c4.93 0 6.13.89 6.13 3.67v2.27c0 2.6-1.58 3.6-5.31 3.6H90.68v2.74h10.9c3 0 4.93.48 4.93 4.35v5.45h3.15v-6.34c0-2.26-.82-4-4.25-4.66V14c2.59-.23 4.59-1.19 4.59-4.68z" class="3ae8e840-cec9-430d-96fe-c02b58021d65"/>
           </svg></span>
           <svg id="T-title" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 584.4 100" xml:space="preserve">
-            <g id="T-finding" onmouseover="nameHover('Q quad')" onmouseout="onMouseUp()" onclick="onNameUp()">
+            <g id="T-finding" class="animated" onmouseover="nameHover('Q quad')" onmouseout="onMouseUp()" onclick="onNameUp()">
               <g>
                 <path class="st0" d="M23.6,46.4h15v1.7H25.8v5h12.4v1.7H25.8v7.2h-2.1V46.4z"/>
                 <path class="st0" d="M45,46.4h2.1v15.7H45V46.4z"/>
@@ -63,7 +69,7 @@
                   <rect x="15" y="39" style="opacity:0" width="156.5" height="33"/>
               </g>
             </g>
-            <g id="T-knowing" onmouseover="nameHover('C Tube')" onmouseout="onMouseUp()" onclick="onNameUp()">
+            <g id="T-knowing" class="animated" onmouseover="nameHover('C Tube')" onmouseout="onMouseUp()" onclick="onNameUp()">
               <g>
                 <path class="st0" d="M209.6,46.4h2.1v6.7h2.7l9.9-6.7h3.5l0,0L216.5,54l12.3,8.1l0,0h-3.7l-10.8-7.3h-2.5v7.3h-2.1V46.4z"/>
                 <path class="st0" d="M234,46.4h3.2l14.4,13.8V46.4h2.1v15.7h-3.2l-14.4-13.8v13.8H234V46.4z"/>
@@ -80,7 +86,7 @@
                   <rect x="198.5" y="39" style="opacity:0" width="183.5" height="33"/>
               </g>
             </g>
-            <g id="T-delight" onmouseover="nameHover('T tri')" onmouseout="onMouseUp()" onclick="onNameUp()">
+            <g id="T-delight" class="animated" onmouseover="nameHover('T tri')" onmouseout="onMouseUp()" onclick="onNameUp()">
               <g>
                 <path class="st0" d="M416.5,46.4h12.7c5.3,0,6.7,1.7,6.7,7.9c0,5.8-1.4,7.9-6.8,7.9h-12.6V46.4z M433.8,53.6c0-4.5-1.4-5.4-4-5.4
                   h-11.1v12.3h10.8c2.6,0,4.4-0.6,4.4-5.3V53.6z"/>
@@ -102,47 +108,11 @@
     </div>
   </header>
   <!-- <button id="shot" onclick="takeScreenshot()">Screenshot</button> -->
-<img id="isaac" class="unselectable" style="opacity:0;" src="img/isaac.svg"/></img></div>
+  <img overflow="hidden" id="isaac" class="unselectable" style="opacity:0;" src="img/isaac.svg"/></img>
   <div id="container"></div>
 <!-- <div id="particle"></div> -->
-<div id="drag" class="blink_me unselectable" style="visibility: hidden;">CLICK<br><p style="font-size:10px; margin-top:5px; margin-bottom:-14px">the elements</p><br>&amp; DRAW</div>
-  <div id="content">
-    <div>
-          
-    <!-- <div id="FKD" class="unselectable" style="text-align:center; opacity:0"><p>LOADING</p></div>  -->
-      <!-- <div id="finding" class="inside unselectable" style="text-align:center; opacity:0"><p class="unselectable">"The true Delight<br>is in the Finding out<br>rather than the Knowing"<br><br><br>- Isaac Asimov -</p> -->
-      <div id="audioPlayer">
-        <svg id="playIco" class="animated" style="pointer-events: none;" onclick="playSound(sound)" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-          <g id="circle">
-            <circle cx="250" cy="250" r="196.7"/>
-          </g>
-          <g id="icoPlay" class="animated" >
-            <polygon points="332,250 184,321.3 184,178.7   "/>
-          </g>
-          <g id="icoPause" class="animated" >
-            <g>
-              <rect x="184.3" y="178.7" width="51.3" height="142.6"/>
-              <rect x="264.3" y="178.7" width="51.3" height="142.6"/>
-            </g>
-          </g>
-          </svg>
-          <p id="EPtext">loading Album</p>
-        
-          <!-- <img id="coverPlayer1" class="animated coverPlayer" src="img/1_The_Finding.jpg" style="text-align:center; opacity:.2"/></img>
-          <img id="coverPlayer2" class="animated coverPlayer" src="img/2_The_Knowing.jpg" style="text-align:center; opacity:.2"/></img>
-          <img id="coverPlayer3" class="animated coverPlayer" src="img/3_The_Delight.jpg" style="text-align:center; opacity:.2"/></img> -->
-          <!-- <img id="coverPlayers" class="animated coverPlayer" src="img/3_The_Delight.jpg" style="text-align:center; opacity:.5"/></img> -->
-          <!-- <button class="btn" onclick="window.open('https://open.spotify.com/album/1iII4AQT0Uv9WA3JjHkfiQ?si=_b7LrdXnRIeao74535q18w');" value="The Finding">LISTEN / BUY</button> -->
-        </div>
-      <!-- </div> -->
-         <img id="back" class="unselectable" onclick="camBack(page);" src="img/back.svg"/></img>
-         <div id="backText" class="unselectable" onclick="camBack(page);">BACK</div>
-      
-
-      <!-- <div id="embed" style="opacity:0.5">
-      <iframe id="player" width="100%" height="270px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/319675420&amp;color=%23ff5500&amp;buying=false&amp;sharing=false&amp;auto_play=false&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_playcount=false&amp;show_artwork=true&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false&amp;single_active=true"></iframe></div> -->
-  </div>
-
+<div id="drag" class="blink_me unselectable" style="visibility: hidden;">CLICK &amp; DRAG</div>
+  
 
 
 <div id="about">
@@ -161,26 +131,34 @@
         
         <p class="title">DISCOGRAPHY</p>  
         <div class="album">
-          <img class="albumImg scaleImg4" src="img/Sarco___Finding_Knowing_Delight.jpg"/></img><br>
+        <div class="albumImg1 coverImg">
+          <img src="img/Sarco_Finding_Knowing_Delight.jpg"/></img><br>
             Finding Knowing Delight<br>
             <button class="btn" onclick="window.open('https://open.spotify.com/album/4uSMW9yD4hshq2nqxJremp');" value="Finding Knowing Delight">
           LISTEN / BUY</button>
+          </div>
+          <div class="albumImg2 coverImg">
+          <img src="img/Sarco_Manifesto.jpg"/></img><br>
+            Manifesto<br>
+            <button class="btn" onclick="window.open('https://soundcloud.com/sarco-o/sets/manifesto');" value="Manifesto">
+          LISTEN</button>
+        </div>
         </div>
 
 
       <div class="albumsOut">
-          <div class="albums a1">
-          <img class="scaleImg1" src="img/1_The_Finding_0.jpg"/><br>The Finding<br>
+          <div class="albums a1 coverImg">
+          <img src="img/1_The_Finding_0.jpg"/><br>The Finding<br>
           <button class="btn" onclick="window.open('https://open.spotify.com/album/1iII4AQT0Uv9WA3JjHkfiQ?si=_b7LrdXnRIeao74535q18w');" value="The Finding">
           LISTEN / BUY</button>
         </div>
-        <div class="albums a2">
-          <img class="scaleImg1" src="img/2_The_Knowing_0.jpg"/>The Knowing<br>
+        <div class="albums a2 coverImg">
+          <img src="img/2_The_Knowing_0.jpg"/>The Knowing<br>
           <button class="btn" onclick="window.open('https://open.spotify.com/album/42sf4LN9SALmSPgTmLg0XV?si=kma11SbMQC2LgG2o1ZYBnA');" value="The Finding">
           LISTEN / BUY</button>
         </div>
-        <div class="albums a3">
-          <img class="scaleImg1" src="img/3_The_Delight_0.jpg"/>The Delight<br>
+        <div class="albums a3 coverImg">
+          <img src="img/3_The_Delight_0.jpg"/>The Delight<br>
           <button class="btn" onclick="window.open('https://open.spotify.com/album/3G9hV59Jh7eOthQtOk9tpz?si=9SwcfAwBRJWZLHAe2iFaKw');" value="The Finding">
           LISTEN / BUY</button>
         </div>
@@ -209,7 +187,7 @@
         <div class="embed-container v1" style="text-align: center;"><iframe src="https://www.youtube.com/embed/gRPlJZS6HD8" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
         <div class="embed-container v4" style="text-align: center;"><iframe src="https://www.youtube.com/embed/orpgVtgkRnw" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
         <div class="embed-container v2" style="text-align: center;"><iframe src="http://player.vimeo.com/video/139909203?loop=1" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
-        <div class="embed-container v3" style="text-align: center;"><iframe src="http://player.vimeo.com/video/35565030?loop=1" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+        <div class="embed-container v3" style="text-align: center;"><iframe src="https://player.vimeo.com/video/35565030?loop=1&color=ff00ff" width="300" height="150" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
       </div>
 
 
@@ -244,93 +222,18 @@
 
 
  
-  <script src="http://threejs.org/build/three.min.js"></script>
-  <script src='https://threejs.org/examples/js/Detector.js'></script>
-  <script src="http://threejs.org/examples/js/ImprovedNoise.js"></script>
-  <script src="http://threejs.org/examples/js/libs/tween.min.js"></script>
-  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-  <script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script>
-
-<!--   // <script src="js_over/particles.js"></script>
-  // <script src="js_over/finding.js"></script> -->
-
-  <!-- // <script src="js/Projector.js"></script> -->
-  <!-- // <script src="http://threejs.org/examples/js/libs/stats.min.js"></script> -->
+  <script src="js/three.min.js"></script>
+  <script src='js/Detector.js'></script>
+  <script src="js/ImprovedNoise.js"></script>
+  <script src="js/tween.min.js"></script>
+  <script src='js/jquery.min.js'></script>
+  <script src="js/OBJLoader.js"></script>
   <script src="js/OrbitControls_old.js"></script>
   <script src="js/stage.js"></script>
   <script src="js/main.js"></script>
-  <!-- // <script src="js/sound.js"></script> -->
+
 
 <script>
-// $('img[src$=".svg"]').each(function() {
-//         var $img = jQuery(this);
-//         var imgURL = $img.attr('src');
-//         var attributes = $img.prop("attributes");
-
-//         $.get(imgURL, function(data) {
-//             // Get the SVG tag, ignore the rest
-//             var $svg = jQuery(data).find('svg');
-
-//             // Remove any invalid XML tags
-//             $svg = $svg.removeAttr('xmlns:a');
-
-//             // Loop through IMG attributes and apply on SVG
-//             $.each(attributes, function() {
-//                 $svg.attr(this.name, this.value);
-//             });
-
-//             // Replace IMG with SVG
-//             $img.replaceWith($svg);
-//         }, 'xml');
-//     });
-// var iframe = document.querySelector('#player');
-// var sc = SC.Widget(iframe);
-
-// sc.bind(SC.Widget.Events.READY, function() {
-//     // var d = document.createTextNode('Ready');
-//     // document.querySelector('body').appendChild(d);
-// });
-
-// document.querySelector('button').addEventListener('click', function() {
-//     sc.play();
-// });
-$(window).blur(function(){
-  if (sound == 1){
-  var audio = eval("this.audio" + currentEP);
-        // clearInterval(fadeIn)
-        // clearInterval(fadeOut)
-        var fadeOut = setInterval(function(){
-          audio.volume-=.02;
-          if (audio.volume <= 0.02){
-            // console.log("done")
-            audio.pause(); 
-            clearInterval(fadeOut)
-            audio.volume=maxVolume;
-          }
-        },fadeVolume/2)
-  }
-});
-
-$(window).focus(function(){
-  // console.log(sound, currentEP)
-  if (sound == 1){
-    // console.log(sound, currentEP)
-    var audio = eval("this.audio" + currentEP);
-        // clearInterval(fadeIn)
-        // clearInterval(fadeOut)
-        audio.volume=0;
-        audio.play();  
-        var fadeIn = setInterval(function(){
-          audio.volume+=.02;
-          if (audio.volume >= maxVolume){
-            // console.log("done") 
-            clearInterval(fadeIn)
-            audio.volume=maxVolume;
-          }
-        },fadeVolume)
-  }
-});
-
 // back to top internal page
 $('#about').scroll(function(){
   console.log($('#about').scrollTop())
@@ -346,7 +249,6 @@ $('#about').scroll(function(){
     $('#about').animate({scrollTop : 0},800);
     return false;
   });
-
 </script>
 
 

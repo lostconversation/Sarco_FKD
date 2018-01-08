@@ -52,7 +52,7 @@ ground = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { map: texture, 
 
 // scene.add( ground );
 // ground.rotation.x = -Math.PI/2;
-ground.position.y = -1500; //lower it 
+ground.position.y = -2000; //lower it 
 geometry.computeFaceNormals(); 
 geometry.computeVertexNormals();
 // scene.add(groundG);

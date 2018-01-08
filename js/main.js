@@ -9,15 +9,13 @@ var isDragged = 0;
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 var hovering = 0;
-// mouse.x=0;
-// mouse.y=0;
 var objects = [];
 var circleClick = [];
 var clickTime = 1;
 var inside = 0;
 var page;
 var audioLoaded = 0;
-var maxVolume = .6;
+var maxVolume = .3;
 var fadeVolume = 50;
 var currentEP = 1;
 var mouseDown = 0;
@@ -28,8 +26,17 @@ var movingMouse = 0;
 var mouseClickX = 0;
 var mouseClickY = 0;
 var hit="T tri";
+var audio = document.createElement('audio');
+var songTitle = document.getElementById('songTitle');
+var song1title = "1. A goodbye";
+var song2title = "2. Down (feat. Veyl)";
+var song3title = "3. South of Sun";
+var song4title = "4. Globe";
+var song5title = "5. Sura Novi";
+var song6title = "6. We Were Promised Flying Cars";
+var currentSong = 1;
 var particleMaterial = new THREE.SpriteMaterial();
-// gui = new dat.GUI();
+
 var matHigh = new THREE.MeshStandardMaterial( { flatShading: false, color: 0x2fe2e3  } );
 var material1 = new THREE.MeshBasicMaterial( { flatShading: false, color: 0x2fe2e3, transparent:true  } ); //blue
 var material2t = new THREE.MeshLambertMaterial( { flatShading: false, color: 0xec6078, emissive: 0x1f0d10, transparent: true, side: THREE.DoubleSide  } );// rosa 0xec6078
@@ -40,7 +47,7 @@ var worldWidth = 256, worldDepth = 256,
 worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;
 var clock = new THREE.Clock();
 var pivot = new THREE.Group();
-// var groundG = new THREE.Group();
+
 
 var randGround1 = 40//Math.floor((Math.random() * 200) + 100);
 var randGround2 = .4
@@ -49,7 +56,7 @@ var firstTime = 1;
 var menu=0;
 var flag = 0;
 var sound = 0;
-var soundLoaded = 0;
+
 
 
 var query = "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
@@ -73,14 +80,6 @@ hhh = window.innerHeight/2;
   var hhh = window.innerHeight/1;
 }
 
-// var www = window.innerWidth;
-// var hhh = window.innerHeight;
-
-// document.getElementById("shot").addEventListener('click', takeScreenshot);
-// document.addEventListener( 'click', onClick, false );
-
-
-
 
 
 
@@ -90,281 +89,50 @@ hhh = window.innerHeight/2;
 
 window.addEventListener( 'resize', onWindowResize, false );
 window.addEventListener( 'touchstart', onMouseDown, false);
-// window.addEventListener( 'touchmove', rayCastDrag, false);
+window.addEventListener( 'touchmove', onMouseMove, false);
 window.addEventListener( 'touchend', onMouseUp, false );
 window.addEventListener( 'mousedown', onMouseDown, false);
 window.addEventListener( 'mouseup', onMouseUp, false );
 window.addEventListener( 'mousemove', onMouseMove, false );
 // window.addEventListener( "wheel", zoom, false );
 
-
-function onMouseDown( event ){
-
-
-    flag = 0;
-    mouseDown = 1;
-    isDragged = 1;
-    // clickTime = 1;
-    showDrag = 0;
-    rayCastDrag( event );
-    var drag = document.getElementById('drag');
-    drag.style.visibility='hidden'; 
-    if (/Mobi/.test(navigator.userAgent)) {     
-      mouseClickX = ( event.touches[0].clientX / www ) * retinaCheck - 1;
-      mouseClickY =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
-      mouse.x = mouseClickX;
-      mouse.y = mouseClickY;
-      rayHover( event );
-      // console.log(event.touches[0].clientX, www, mouseClickX)
-    } else{
-    mouseClickX = ( event.clientX / www ) * retinaCheck - 1;
-    mouseClickY =  - ( event.clientY / hhh ) * retinaCheck + 1;
-    // console.log(event.touches[0].clientX)
-  }
-    if(hovering==1){
-     clickTime = 1;
-  }
-};
-
-function onMouseMove( event ){
-  if (hovering==1){
-    rayCastDrag( event );
-  }
-
-  if (/Mobi/.test(navigator.userAgent)) {
-      // mouse.x = ( event.touches[0].clientX / www ) * retinaCheck - 1;
-      // mouse.y =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
-  }else{
-  mouse.x = ( event.clientX / www ) * retinaCheck - 1;
-  mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
-  // movingMouse=1;
-}
-};
-
-function onMouseUp( event ){
-  // console.log(controls.enabled)
-  isDragged = 0;
-  mouseDown = 0;
-  if (/Mobi/.test(navigator.userAgent)) {
-    if (hovering==1){
-      
-    }else{
-      mouse.x = 11;
-      mouse.y = 11;
-    }
-      // mouse.x = ( event.touches[0].clientX / www ) * retinaCheck - 1;
-      // mouse.y =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
-  }
-    var xx = Math.abs(mouseClickX - mouse.x);
-    var yy = Math.abs(mouseClickY - mouse.y);
-    // console.log(xx, mouseClickX, mouse.x)
- 
-  // console.log(xx)
-  if (xx > 0.04 || yy > 0.04){
-    flag=1;
-    
-  }else{
-    flag=0;
-     if(inside==0){
-      clickTime=0;
-    }
-  }
-
-
-
-    if (flag == 0){
-
-        // console.log("click");
-        if(clickTime==1){
-          // clickTime=0;
-        // new TWEEN.Tween( camera.position).to({ z: 1500 }, 2000 ).easing(TWEEN.Easing.Quartic.InOut).start()
-        // clickTime = 0;
-      }else{
-        clickTime=0;
-        // event.preventDefault();
-        
-        if (/Mobi/.test(navigator.userAgent)) {  
-        // console.log(event.touches[0].clientX, www, mouseClickX, mouse.x, mouse)   
-            // mouse.x = mouseClickX;
-            // mouse.y = mouseClickY;
-            // console.log("release")
-          } else{
-            if(nameUp==1){
-            //   mouse.x = ( event.clientX / www ) * retinaCheck - 1;
-            // mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
-            }else{
-            mouse.x = ( event.clientX / www ) * retinaCheck - 1;
-            mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
-          // console.log(event.touches[0].clientX)
-        }}
-        raycaster.setFromCamera( mouse, camera );
-        if (nameUp==1){
-          var intersects = 'T tri';
-        }else{
-        var intersects = raycaster.intersectObjects( objects, true );
-        }
-          // console.log(hit, flag, clickTime)
-          // if(hit!="no" && /Mobi/.test(navigator.userAgent)){
-          //   intersects = hit;
-          //   console.log(intersects)
-          // }
-          // console.log(mouse.x)
-        if ( intersects.length > 0 ) {
-          clickTime=1;
-          inside=1;
-          inte = intersects[ 0 ];
-          if (nameUp==1){
-            
-        }else{
-
-          addClickSphere( inte );
-        }
-          // #T-finding, #T-knowing, #T-delight{
-          // opacity: .3;
-          // pointer-events: all !important;
-          // } 
-          document.getElementById('T-knowing').style.pointerEvents = 'none';
-          document.getElementById('T-finding').style.pointerEvents = 'none';
-          document.getElementById('T-delight').style.pointerEvents = 'none';
-          // var FKD = document.getElementById('FKD');
-          // FKD.classList.add('zoom');
-          new TWEEN.Tween( cluster.rotation).to({ x: 0, y: Math.PI*2 , z: 0 }, 5000 ).easing(TWEEN.Easing.Quartic.InOut).start();
-          // new TWEEN.Tween(FKD.scale).to({ x: 2, y: 2}).easing(TWEEN.Easing.Quartic.InOut).start();
-          // console.log(FKD)
-          // new TWEEN.TweenMax.to(KFD, .2, {transformPerspective:1000,scale:1, autoAlpha: 1,
-          // transformOrigin:"50% 50%"});  
-          // new TWEEN.Tween( FKD.position).to({ x: 0, y: 1330}, 2000 ).easing(TWEEN.Easing.Quartic.InOut).start()
-          // var prevEP = currentEP;
-          // var prevAudio = eval("this.audio" + currentEP);
-
-          if(hit=="Q quad"){
-              xx = 150;
-              yy = -48;
-              zz = 305;  
-              // currentEP=1;
-              // audio.src=ep1;
-              // var cover = document.getElementById('coverPlayers');
-              // cover.src="img/1_The_Finding.jpg";
-              // var newTextTitle = "THE FINDING";
-              // var epText = document.getElementById('EPtext').textContent='Listen to the EP "THE FINDING"';
-              
-            } else if(hit=="T tri"){
-              xx = -363;
-              yy = 143;
-              zz = -46;
-              // currentEP=3;
-              // audio.src=ep2;
-              // var cover = document.getElementById('coverPlayers');
-              // cover.src="img/3_The_Delight.jpg";
-              // cover.style.opacity=1;
-              // var newTextTitle = "THE DELIGHT";
-              // var epText = document.getElementById('EPtext').textContent='Listen to the EP "THE DELIGHT"';
-            } else if(hit=="C Tube"){
-              xx = -217;
-              yy = 107;
-              zz = 185;
-              // currentEP=2;
-              // var cover = document.getElementById('coverPlayers');
-              // cover.src="img/2_The_Knowing.jpg";
-              // var newTextTitle = "THE KNOWING";
-              // var epText = document.getElementById('EPtext').textContent='Listen to the EP "THE KNOWING"';
-            }
-            
-            $('html,body').css('cursor', 'crosshair');
-            controls.enabled = false;
-              
-            new TWEEN.Tween( camera.position).to({ x: xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
-              
-              new TWEEN.Tween( camera.position).to({ x: 0, y: -50, z: 1200 }, 5000 ).easing(TWEEN.Easing.Quartic.InOut).onComplete(function(){
-                // console.log("asdfasdf")
-                  // camBack(page);
-                  controls.enabled = true;
-                  clickTime = 0;
-                  inside=0;
-                  document.getElementById('T-knowing').style.pointerEvents = 'all';
-                  document.getElementById('T-finding').style.pointerEvents = 'all';
-                  document.getElementById('T-delight').style.pointerEvents = 'all';
-                  var isaac = document.getElementById('isaac');
-                  isaac.style.opacity=0;
-
-                }).start();
-
-
-
-
-              
-              // page = document.getElementById('finding');
-              // page.style.opacity=1; 
-              // var FKD = document.getElementById('FKD');
-              // FKD.style.opacity=0; 
-              // var back = document.getElementById('back');
-              // back.style.visibility="visible";
-              // if(/Mobi/.test(navigator.userAgent)) {
-              //   back.style.opacity=0;
-              // }else{
-              //   back.style.opacity=1;
-              // }    
-              // var backText = document.getElementById('backText');
-              // backText.style.visibility="visible"; 
-              // if(/Mobi/.test(navigator.userAgent)) {
-              //   backText.style.opacity=1;
-              // }else{
-              //   backText.style.opacity=0;
-              // }
-               
-
-              // var menuu = document.getElementsByTagName('span');
-              // menuu[0].classList.add('colorBlack');
-              // menuu[1].classList.add('colorBlack');
-              // menuu[2].classList.add('colorBlack');
-
-              // var soundIco = document.getElementsByClassName('soundIco');
-              // soundIco[0].style.stroke="black"; // [1] è il sound_no.svg
-              // var EPtitle = document.getElementById('EPtitle');
-              // EPtitle.style.color="black";
-            
-              
-              // var dollyN = 1;
-              // camDolly(40)
-              
-              // var dolly = setInterval(function(){
-              //   dollyN += .00001;
-              //   controls.dollyIn(dollyN);
-              //     if (dollyN >=1.0013){
-              //   dollyN=1;
-              //         var audioPlayer = document.getElementById('coverPlayers');
-              //         audioPlayer.style.opacity=1; 
-              //         var playIcoSvg = document.getElementById('playIco');
-              //         playIcoSvg.style.pointerEvents = "all";
-              //         playIcoSvg.style.opacity=1; 
-              //   clearInterval(dolly);
-              //     }
-              //   }, 8);
-              }).start();
-              
+window.onblur = function() {
   
-
-      }
-      }
-    }
-    else if(flag == 1){
-      if(inside==0){
-      clickTime=0;
-    }
-        // console.log("drag");
-        // isDragged = 1;
-    }
-    nameUp=0;
+  if (sound == 1){
+    audio=this.audio;
+  // var audio = eval("this.audio" + currentEP);
+        // if (!fadeIn){}else{clearInterval(fadeIn)};
+        // if (!fadeOut){}else{clearInterval(fadeOut)};
+        // audio.volume = 1;
+        audio.pause();
+        // var fadeOut = setInterval(function(){
+        //   // console.log(maxVolume, audio.volume)
+        //           audio.volume= audio.volume - .005;
+        //           if (audio.volume <= 0.01){
+        //             // console.log("done")
+        //             audio.pause(); 
+                    
+        //             audio.volume=maxVolume;
+        //             clearInterval(fadeOut);
+        //           }
+        //         },fadeVolume/2);
+  }
 };
 
-
-
-// var container = document.getElementById('container');
-// container.onclick = function() {
-
-  
-      
-// }
+window.onfocus = function() {
+  if (sound == 1){
+    audio=this.audio;
+        audio.volume=0;
+        audio.play();  
+        var fadeIn = setInterval(function(){
+          audio.volume+=.005;
+          if (audio.volume >= maxVolume){
+            audio.volume=maxVolume;
+            clearInterval(fadeIn);
+          }
+        },fadeVolume*2);
+  }
+};
 
 
 
@@ -375,14 +143,7 @@ window.THREE = THREE;
 
 
 
-$(document).ready(function(){
-
-// var audio_preload = 0;
-// function launchApp(launch){
-//   audio_preload++;
-//   if ( audio_preload == 3 || launch == 1) {  // set 3 to # of your files
-//     start();  // set this function to your start function
-//   }
+document.addEventListener("DOMContentLoaded", function(event) { 
 
 $('#btnTop').fadeOut();
   $('#nav-icon').click(function(){
@@ -401,8 +162,183 @@ animate();
 
 }); // end document.ready
 
+
+
+function onMouseDown( event ){
+
+
+    flag = 0;
+    mouseDown = 1;
+    isDragged = 1;
+    // clickTime = 1;
+    showDrag = 0;
+    
+    var drag = document.getElementById('drag');
+    drag.style.visibility='hidden'; 
+    if (/Mobi/.test(navigator.userAgent)) {     
+      mouseClickX = ( event.touches[0].clientX / www ) * retinaCheck - 1;
+      mouseClickY =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
+      mouse.x = mouseClickX;
+      mouse.y = mouseClickY;
+      hovering = 1;
+      if (inside == 0){
+      rayHover( event );
+    }
+      // console.log( event.touches[0].clientX, www, mouseClickX)
+    } else{
+    mouseClickX = ( event.clientX / www ) * retinaCheck - 1;
+    mouseClickY =  - ( event.clientY / hhh ) * retinaCheck + 1;
+    // console.log(event.touches[0].clientX)
+  }
+
+  rayCastDrag( event );
+    if(hovering==1){
+     clickTime = 1;
+  }
+};
+
+function onMouseMove( event ){
+  // console.log("mooove");
+  if (hovering==1){
+    rayCastDrag( event );
+  }
+
+  if (/Mobi/.test(navigator.userAgent)) {
+      mouse.x = ( event.touches[0].clientX / www ) * retinaCheck - 1;
+      mouse.y =  - ( event.touches[0].clientY / hhh ) * retinaCheck + 1;
+  }else{
+      mouse.x = ( event.clientX / www ) * retinaCheck - 1;
+      mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
+}
+};
+
+function onMouseUp( event ){
+  // console.log(controls.enabled)
+  isDragged = 0;
+  mouseDown = 0;
+  if (/Mobi/.test(navigator.userAgent)) {
+      mouse.x = ( event.clientX / www ) * retinaCheck - 1;
+      mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
+  }
+    var xx = Math.abs(mouseClickX - mouse.x);
+    var yy = Math.abs(mouseClickY - mouse.y);
+    // console.log(xx, mouseClickX, mouse.x)
+ 
+  // console.log(xx)
+  if (xx > 0.04 || yy > 0.04){
+    flag=1; 
+  }else{
+    flag=0;
+     if(inside==0){
+      clickTime=0;
+    }
+  }
+
+
+
+    if (flag == 0){
+        // console.log("click");
+      if(clickTime==1){
+          // non-clickable
+      }else{
+        clickTime=0;
+        // event.preventDefault();
+        
+        if (/Mobi/.test(navigator.userAgent)) {  
+        // console.log(event.touches[0].clientX, www, mouseClickX, mouse.x, mouse)   
+            // mouse.x = mouseClickX;
+            // mouse.y = mouseClickY;
+            // console.log("release")
+          } else{
+            if(nameUp==1){
+            // mouse.x = ( event.clientX / www ) * retinaCheck - 1;
+            // mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
+            }else{
+            mouse.x = ( event.clientX / www ) * retinaCheck - 1;
+            mouse.y = - ( event.clientY / hhh ) * retinaCheck + 1;
+          // console.log(event.touches[0].clientX)
+        }}
+        raycaster.setFromCamera( mouse, camera );
+        if (nameUp==1){
+          var intersects = 'T tri';
+        }else{
+        var intersects = raycaster.intersectObjects( objects, true );
+        }
+        if ( intersects.length > 0 ) {
+
+          clickTime=1;
+          inside=1;
+          inte = intersects[ 0 ];
+          if (nameUp==1){
+            
+        }else{
+
+          addClickSphere( inte );
+        }
+          document.getElementById('T-knowing').style.pointerEvents = 'none';
+          document.getElementById('T-finding').style.pointerEvents = 'none';
+          document.getElementById('T-delight').style.pointerEvents = 'none';
+
+          new TWEEN.Tween( cluster.rotation).to({ x: 0, y: Math.PI*2 , z: 0 }, 5000 ).easing(TWEEN.Easing.Quartic.InOut).start();
+
+          if(hit=="Q quad"){
+              xx = 150;
+              yy = -48;
+              zz = 305;  
+                          
+            } else if(hit=="T tri"){
+              xx = -363;
+              yy = 143;
+              zz = -46;
+              
+            } else if(hit=="C Tube"){
+              xx = -217;
+              yy = 107;
+              zz = 185;
+              
+            }
+            
+            $('html,body').css('cursor', 'crosshair');
+            controls.enabled = false;
+              
+            new TWEEN.Tween( camera.position).to({ x: xx, y: yy, z: zz }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
+              
+              new TWEEN.Tween( camera.position).to({ x: 0, y: -50, z: 1200 }, 5000 ).easing(TWEEN.Easing.Quartic.InOut).onComplete(function(){
+                // console.log("asdfasdf")
+                  // camBack(page);
+                  controls.enabled = true;
+                  if (menu == 0){
+                  clickTime = 0;
+                  inside=0;
+                  }
+                  document.getElementById('T-knowing').style.pointerEvents = 'all';
+                  document.getElementById('T-finding').style.pointerEvents = 'all';
+                  document.getElementById('T-delight').style.pointerEvents = 'all';
+                  var isaac = document.getElementById('isaac');
+                  isaac.style.opacity=0;
+                }).start();
+             }).start();
+              
+  
+
+      }
+      }
+    }
+    else if(flag == 1){
+      if(inside==0){
+      clickTime=0;
+    }
+    }
+    nameUp=0;
+};
+
+
+
+
+
 function onNameUp(){
   nameUp = 1;
+  hovering=1;
   onMouseUp();
   // console.log(t1)
 }
@@ -414,11 +350,6 @@ function rayCastDrag( event ){
 
         distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
 
-        // console.log(distance);
-// mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-// mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-        // var camZ = camera.position.z/1000;
-        // console.log(camZ);
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera( mouse, camera );
         // console.log(mouse.x, event.clientX, event.touches[0].clientX, mouseClickX)
@@ -457,8 +388,9 @@ const begin = camera.position.clone();
 // const beginT = controls.target.clone();
 var position = new THREE.Vector3(XX,YY,ZZ);
 
+
 new TWEEN.Tween(begin)
-  .to(position, 200)
+  .to(position, 2000)
   .easing(TWEEN.Easing.Quartic.InOut)
   .onUpdate(function() {
     camera.position.set(this.x, this.y, this.z)//.normalize().negate();
@@ -469,39 +401,25 @@ new TWEEN.Tween(begin)
       
       clickTime=0;
       cameraMove( 0, -50, 1200 )
-      var drag = document.getElementById('drag');
-      drag.style.visibility='visible'; 
+      
+
   }else{
     if (menu==1){
     clickTime = 1;
   }else if (firstTime ==-1){
-    // $("#drag").css({
-       // visibility: "visible"
-       // left:  window.innerWidth/2-50,
-       // top:   window.innerHeight/2+35
-    // });
+    var drag = document.getElementById('drag');
+    drag.style.visibility='visible'; 
+      songTitle.textContent=song1title;
+      if (/Mobi/.test(navigator.userAgent)) {
+            
+        } else{
+          playSound(sound);
+        }
+      
   }}
   })
   .start();
 }
-
-// function camBack(page){
-  
-//   if (/Mobi/.test(navigator.userAgent)) {  
-//         // console.log(event.touches[0].clientX, www, mouseClickX, mouse.x, mouse)   
-//             mouse.x = 1000;
-//             mouse.y = 1000;          
-//   }
-//   new TWEEN.Tween( camera.position).to({ x:  0, y: -50, z: 1200 }, 3000 ).easing(TWEEN.Easing.Quartic.Out).onComplete(function(){
-//                 // camDolly(70)
-//                 clickTime = 0;
-//                 inside=0;
-//                 document.getElementById('T-knowing').style.pointerEvents = 'none';
-//                 document.getElementById('T-finding').style.pointerEvents = 'none';
-//                 document.getElementById('T-delight').style.pointerEvents = 'none';
-//               }).start()
-// }
-
 
 
 
@@ -510,63 +428,21 @@ function zoom(){
 }
 
 function Sound() {
-    // this.name = name;
-    // audio = scene.getObjectById( 'audio');
-    // audio = document.createElement('audio');
-    audio1 = document.createElement('audio');
-    audio2 = document.createElement('audio');
-    audio3 = document.createElement('audio');
-    // var rand = Math.floor(Math.random() * 2)+1;
-    // audio.src = currentEP;
-    // console.log(audio.src)
-    audio1.src = "audio/1_The_Finding.mp3";
-    audio2.src = "audio/2_The_Knowing.mp3";
-    audio3.src = "audio/3_The_Delight.mp3";
-    // audio = currentAudio;
-    audio1.volume=maxVolume;
-    audio1.loop=true;
-    audio2.volume=maxVolume;
-    audio2.loop=true;
-    audio3.volume=maxVolume;
-    audio3.loop=true;
-
-    // // this.audio.play();
-    // audio.onended = function() {
-    // // rand+=1;
-    // // if (rand == 3) rand=1;
-    // // audio.src = 'audio_1/Cassini_'+rand+'.mp3';
-    // audio.play();
-    // };
-    // container = document.querySelector('#cont');
-    // stats = new Stats();
-    // container.appendChild( stats.dom );
-    // $("#statsDiv").hide();
-
-
-    // audioSfx = document.createElement('audio');
-    // audioSfxArray = new Array;
-    // for ( var i = 1; i < 8; i ++ ) {
-    // audioSfxArray.push('audio_1/SFX/sfx-'+i+'.mp3');
-    // }
-
+    audio.src = "audio/Sarco_Track_"+1+".mp3";
+    audio.volume=maxVolume;
+    audio.onended = function() {
+      nextSong();
+    };
   }
 
 function playSound(sound){
-  // console.log(SC.pause());
-  //   SC.pause();
     this.sound=sound;
+    audio=this.audio;
     this.maxVolume=maxVolume;
     var icoPlay = document.getElementById('icoPlay');
     var icoPause = document.getElementById('icoPause');
-    if (soundLoaded == 0){
-      var soundIco = document.getElementById('sound_no');
-          soundIco.style.opacity=1;
-    soundLoaded = 1;
-    // console.log(sound)
-    }
     var soundIcoBar = document.getElementById('g2');
-    if (this.sound==1){ //-------------- PAUSE
-        var audio = eval("this.audio" + currentEP);
+    if (this.sound==1){ //---------------------------- PAUSE
         clearInterval(fadeIn);
         clearInterval(fadeOut);
         if (/Mobi/.test(navigator.userAgent)) {
@@ -584,16 +460,11 @@ function playSound(sound){
         }
         this.sound=0;
         soundIcoBar.style.opacity=1;
-        icoPause.style.opacity=0;
-        icoPlay.style.opacity=1;
-        var EPtitle = document.getElementById('EPtitle');
-        EPtitle.style.opacity=.2;
-    }else if (this.sound==0){ //-------------- PLAY
-        var audio = eval("this.audio" + currentEP);
+        var songTitle = document.getElementById('songTitle');
+        songTitle.style.opacity=.2;
+    }else if (this.sound==0){ //------------------------- PLAY
         clearInterval(fadeIn);
         clearInterval(fadeOut);
-        
-         
         audio.volume=0;
         audio.play(); 
         var fadeIn = setInterval(function(){
@@ -603,20 +474,30 @@ function playSound(sound){
             clearInterval(fadeIn);
             audio.volume=maxVolume;
           }
-        },fadeVolume);
+        },fadeVolume*2);
         this.sound=1;
-        soundIcoBar.style.opacity=0;
-        icoPause.style.opacity=1;
-        icoPlay.style.opacity=0;
-        var EPtitle = document.getElementById('EPtitle');
-        EPtitle.style.opacity=1;
+        var soundIcoBar = document.getElementById('g2').style.opacity=0;
+        var songTitle = document.getElementById('songTitle').style.opacity=1;
     }
 } 
 
-// function soundPlause
+function nextSong(){
+    currentSong+=1;
+      if(currentSong==7){currentSong=1};
+    sound=1;
+    audio.src = 'audio/Sarco_Track_'+currentSong+'.mp3';
+    audio.play();
+    var songTitle = document.getElementById('songTitle');
+    songTitle.style.opacity=1;
+    var songTit = eval("song"+currentSong+"title");
+    songTitle.textContent= songTit;
+    var soundIcoBar = document.getElementById('g2').style.opacity=0;
+    
+}
 
 
 function init() {
+
 this.www=www;
 this.hhh=hhh;
 // console.log(www,hhh)
@@ -642,7 +523,7 @@ controls.maxPolarAngle = 2;
 controls.dampingFactor = .08;
 controls.rotateSpeed = 0.04;
 controls.enableZoom = true;
-controls.zoomSpeed = .2; // 1.0 is default
+controls.zoomSpeed = .2;
 controls.minDistance = 200;
 controls.maxDistance = 3000;
 controls.enablePan = false;
@@ -670,8 +551,6 @@ scene.add( light1 );
 light2 = new THREE.DirectionalLight( 0xec6078, 5);
 // light2.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xf0000ff } ) ) );
 light2.position.set( -200, -250, 80 );
-// scene.add( light2 );
-
 
 }
 
@@ -682,12 +561,8 @@ function obj1(){
 var geometry = new THREE.PlaneGeometry( 6000, 6000 );
 var materialINV = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0.3, alphaTest: 0, visible: false } );
 flatT = new THREE.Mesh( geometry, materialINV );
-// circle1.position.copy( inte.point );
 flatT.lookAt(camera.position);
 flatT.name="flatTarget";
-// flatT.opacity=0;
-// flatT.rotation.x=3.14/2;
-
 scene.add( flatT );
 flatTarget.push(flatT)
 
@@ -695,10 +570,6 @@ flatTarget.push(flatT)
   cluster.name="cluster"
   scene.add(cluster);
 
-
-
-
-// var material2t = new THREE.MeshLambertMaterial( { flatShading: false, color: 0xffffff, transparent: true  } );// rosa 0xec6078
 
 var ooo=0;
 
@@ -716,7 +587,6 @@ var loaderC1 = new THREE.OBJLoader( );
         object.name="c1";
         cluster.add( object );
         objects.push( object );
-        // ooo+=1;
 
 });
 
@@ -735,7 +605,6 @@ var loaderT1 = new THREE.OBJLoader( );
         object.name="t1";
         cluster.add( object );
         objects.push( object );
-        // ooo+=1;
 });
 
 var loaderQ1 = new THREE.OBJLoader( );
@@ -770,7 +639,6 @@ var loaderQ2 = new THREE.OBJLoader( );
         object.rotation.y = 80.01;
         object.name="q2";
         cluster.add( object );
-        // ooo+=1;
 });
 
 var loaderC2 = new THREE.OBJLoader( );
@@ -805,11 +673,8 @@ var loaderT2 = new THREE.OBJLoader( );
 
 
 var go = setInterval(function(){
-  // console.log("sdf")
 if(ooo>=6){
-  // console.log("sdf")
 cameraMove( 0,-50,2000 );
-// floorMove();
 clearInterval(go);
 }
 }, 2000);
@@ -817,53 +682,32 @@ clearInterval(go);
 
 function about(){
 
-    if (menu==0){
-      // var embed = document.getElementById('embed');
-      // embed.style.visibility="hidden";
-      // embed.style.pointerEvents = "none"; 
-      $("#about").fadeIn(1000).css({
-       'pointer-events': 'all'
+  if (menu==0){
+    $("#about").fadeIn(1000).css({
+     'pointer-events': 'all'
     });
-      // $("#logo-0").fadeTo('slow', .5);
-      menu = 1;
-      clickTime = 1;
-      if (inside==0){
-      var logo = document.getElementById('logoSvg');
-      logo.style.opacity=0;
-      var tTitle = document.getElementById('T-title');
-      tTitle.style.opacity=0;
-      }  
-      var soundIco = document.getElementsByClassName('soundIco');
-      soundIco[0].style.stroke="white";
-      console.log(soundIco[0])
-      var menuu = document.getElementsByTagName('span');
-              menuu[0].classList.remove('colorBlack');
-              menuu[1].classList.remove('colorBlack');
-              menuu[2].classList.remove('colorBlack');
-  }
-  else if (menu==1){
+
+  menu = 1;
+  clickTime = 1;
+  inside = 1;
+
+  var logo = document.getElementById('logoSvg');
+  logo.style.opacity=0;
+  var tTitle = document.getElementById('T-title');
+  tTitle.style.opacity=0;
+      
+  }  else if (menu==1){
 
     $("#about").fadeOut(1000).css({
        'pointer-events': 'none'
     });
-    // $("#logo-0").fadeTo('slow', 1);
     menu = 0;
-    if (inside==0){
     var logo = document.getElementById('logoSvg');
     logo.style.opacity=1;
     var tTitle = document.getElementById('T-title');
-      tTitle.style.opacity=1;
-    var soundIco = document.getElementsByClassName('soundIco');
-      soundIco[0].style.stroke="white";
+    tTitle.style.opacity=1; 
     clickTime = 0;
-    } else if (inside==1){
-      var soundIco = document.getElementsByClassName('soundIco');
-      soundIco[0].style.stroke="black";
-    var menuu = document.getElementsByTagName('span');
-              menuu[0].classList.add('colorBlack');
-              menuu[1].classList.add('colorBlack');
-              menuu[2].classList.add('colorBlack');
-    }
+    inside = 0;
 }
 }
 
@@ -977,16 +821,7 @@ function rayHover( event ){
               var Td = document.getElementById('T-delight');
               Td.style.opacity=.1; 
             }
-
-            // var FKD = document.getElementById('FKD');
-            // FKD.style.opacity = 1;
         }else{
-          if (showDrag == 1){
-            // var drag = document.getElementById('drag');
-            //     drag.style.visibility='visible'; 
-
-          }
-
           hovering=0;
           material1.opacity=1;
           var isaac = document.getElementById('isaac');
@@ -1030,7 +865,7 @@ function rayHover( event ){
 
 function nameHover( hit ){
             clickTime=1;
-            hovering=1;
+            // hovering=1;
             material1.opacity=.2;
             if(hit=="Q quad"){
               q1 = scene.getObjectByName('q1');
@@ -1101,7 +936,6 @@ function nameHover( hit ){
               var Td = document.getElementById('T-delight');
               Td.style.opacity=.1;
             }
-// if (page == "f")
 }
 
 function onWindowResize() {
@@ -1148,16 +982,19 @@ function render( event ) {
   light1.position.y = Math.cos( time * 10.5 ) * 70;
   light1.position.z = Math.cos( time * 10.3 ) * 150;
   // }
-  if (firstTime==1){
-    cluster.rotation.y = (Math.cos( time * 10.5 ) * .1)+.1; //+=.003;
-  }  
-  if(clickTime==0){
-    if (hovering==0){
-  cluster.rotation.y = (Math.cos( time * 10.5 ) * .1)+.1; //+=.003;
+    if (firstTime==1){
+      cluster.rotation.y = (Math.cos( time * 10.5 ) * .1)+.1; //+=.003;
+    }  
+    if(clickTime==0){
+      if (hovering==0){
+        cluster.rotation.y = (Math.cos( time * 10.5 ) * .1)+.1; //+=.003;
+      }
+      if (/Mobi/.test(navigator.userAgent)) {  
+      }else{
+      rayHover( event );
+      } 
   }
-  rayHover( event );
-  }
-  // console.log(hovering)
+  // console.log(hovering, clickTime)
   light2.position.x = Math.sin( time * 10.7 ) * -530;
   light2.position.y = Math.cos( time * 10.5 ) * 540;
   light2.position.z = Math.cos( time * 10.3 ) * 1530;
